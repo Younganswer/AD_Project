@@ -28,6 +28,7 @@ from BackGround import BackGround
 from Bullet     import Bullet
 from Enemy      import Enemy
 from Player     import Player
+from EXP        import EXP
 
 SCREEN_WIDTH            = 800
 SCREEN_HEIGHT           = 600
@@ -76,9 +77,20 @@ class Scene(QGraphicsScene):
             self.addItem(b)
 
         self.enemies = [Enemy()]
-        self.enemies[0].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.enemies[0].setPos(SCREEN_WIDTH, 0)
         self.addItem(self.enemies[0])
-        self.idx = 0
+        self.idx = [0]
+
+        self.EXP = EXP()
+        self.EXP.score = 8
+        self.EXP.setPos(SCREEN_WIDTH-40, 20)
+        self.addItem(self.EXP)
+
+        self.EXP1 = EXP()
+        self.EXP1.score = 1
+        self.EXP1.setPos(SCREEN_WIDTH-60, 20)
+        self.addItem(self.EXP1)
+
 
         self.view = QGraphicsView(self)
         self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -106,9 +118,14 @@ class Scene(QGraphicsScene):
         self.player.game_update(self.keys_pressed)
         for b in self.bullets:
             b.game_update(self.keys_pressed, self.player)
-        self.enemies[self.idx].game_update(self.enemies, self.idx)
+        self.enemies[self.idx[0]].game_update(self.enemies, self.idx, self.bullets, self.EXP)
+        self.EXP.game_update(self.EXP1)
+        self.EXP1.game_update(self.EXP1)
+
         if self.enemies[-1] == 1:
             self.enemies[-1] = Enemy()
+            self.enemies[-1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+            self.addItem(self.enemies[-1])
 
 
 
