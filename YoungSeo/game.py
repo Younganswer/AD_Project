@@ -42,38 +42,66 @@ ENEMY_SPONE_X           = 800
 ENEMY_SPONE_Y           = 600
 ENEMY_FRAMES            = 500
 
+
+
+# 창을 닫을 것인 지 확인하는 클래스
 class AskClose(QWidget):
 
-    def __init__(self):
-        super().__init__(self)
+    def __init__(self, scene):
+        QWidget.__init__(self)
+        self.scene = scene
         self.initUI()
     
     def initUI(self):
         okButton = QPushButton("OK")
         cancelButton = QPushButton("Cancel")
 
+        okButton.clicked.connect(self.buttonClicked)
+        cancelButton.clicked.connect(self.buttonClicked)
+
         grid = QGridLayout()
         self.setLayout(grid)
-        grid.setSpacing(20)
+        grid.setSpacing(10)
 
-        self.askLabel = QLabel("Do you want to close?")
+        askLabel = QLabel("Do you want to close?")
 
-        grid.addWidget(okButton)
-        grid.addWidget(cancelButton)
-        grid.addWidget(askLabel)
+        grid.addWidget(askLabel, 0, 0, 1, 2) # 시작 좌표 (0, 0) && 차지하는 칸의 개수 (1, 2)
+        grid.addWidget(okButton, 1, 0)
+        grid.addWidget(cancelButton, 1, 1)
 
         self.move(300, 300)
         self.setWindowTitle('Really?')
-        self.show()
+        # self.show()
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            self.close()
+
+        elif event.key() == Qt.Key_Enter or event.key() == Qt.Key_Return:
+            self.scene.view.close()
+            self.close()
+
+    def buttonClicked(self):
+
+        button = self.sender()
+        key = button.text()
+        
+        if key == "Cancel":
+            self.close()
+
+        elif key == "OK":
+            self.scene.view.close()
+            self.close()
 
 
 
+# 게임 배경 설정 클래스
 class BackGround(QGraphicsPixmapItem):
     mapArray = []
-    mapBlack = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/File.py/SecondSemester/game/Backgrounds/black'
-    mapBlue = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/File.py/SecondSemester/game/Backgrounds/blue'
-    mapDarkBlue = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/File.py/SecondSemester/game/Backgrounds/darkPurple'
-    mapPurple = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/File.py/SecondSemester/game/Backgrounds/Purple'
+    mapBlack = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/YoungSeo/Backgrounds/black.png'
+    mapBlue = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/YoungSeo/Backgrounds/blue.png'
+    mapDarkBlue = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/YoungSeo/Backgrounds/darkPurple.png'
+    mapPurple = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/YoungSeo/Backgrounds/purple.png'
     mapArray.extend([mapBlack, mapBlue, mapDarkBlue, mapPurple])
 
     def __init__(self, parent=None):
@@ -83,12 +111,14 @@ class BackGround(QGraphicsPixmapItem):
         self.setPos(0, 0)
 
 
+
+# 적 설정 클래스
 class Enemy(QGraphicsPixmapItem):
     enemyArray = []
-    enemyBlack = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/File.py/SecondSemester/game/PNG/Enemies/enemyBlack1'
-    enemyBlue  = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/File.py/SecondSemester/game/PNG/Enemies/enemyBlue2'
-    enemyGreen = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/File.py/SecondSemester/game/PNG/Enemies/enemyGreen3'
-    enemyRed   = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/File.py/SecondSemester/game/PNG/Enemies/enemyRed4'
+    enemyBlack = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/YoungSeo/PNG/Enemies/enemyBlack1.png'
+    enemyBlue  = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/YoungSeo/PNG/Enemies/enemyBlue2.png'
+    enemyGreen = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/YoungSeo/PNG/Enemies/enemyGreen3.png'
+    enemyRed   = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/YoungSeo/PNG/Enemies/enemyRed4.png'
     enemyArray.extend([enemyBlack, enemyBlue, enemyGreen, enemyRed])
 
     enemyPosArray = [(0, 0),   (100, 0),   (200, 0),   (300, 0),   (400, 0),   (500, 0),   (600, 0),   (700, 0),
@@ -120,10 +150,11 @@ class Enemy(QGraphicsPixmapItem):
         
 
 
+# 플레이어 설정 클래스
 class Player(QGraphicsPixmapItem):
     def __init__(self, parent=None):
         QGraphicsPixmapItem.__init__(self, parent)
-        self.setPixmap(QPixmap("C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/File.py/SecondSemester/game/PNG/playerShip1_blue.png"))
+        self.setPixmap(QPixmap("C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/YoungSeo/PNG/playerShip1_blue.png"))
         # Player로 만들어진 객체에 image를 옮겨준다. QPixmap클래스의 메소드.
 
     def game_update(self, keys_pressed):
@@ -141,10 +172,12 @@ class Player(QGraphicsPixmapItem):
         # 지정된 객체의 좌표를 정해준다.
 
 
+
+# 총알 설정 클래스
 class Bullet(QGraphicsPixmapItem):
     def __init__(self, offset_x, offset_y, parent=None):
         QGraphicsPixmapItem.__init__(self,parent)
-        self.setPixmap(QPixmap("C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/File.py/SecondSemester/game/PNG/Lasers/laserBlue07.png"))
+        self.setPixmap(QPixmap("C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/YoungSeo/PNG/Lasers/laserBlue07.png"))
         # bullet이미지 할당.
         self.offset_x = offset_x
         self.offset_y = offset_y
@@ -166,8 +199,11 @@ class Bullet(QGraphicsPixmapItem):
                 self.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 # 0.8초 동안 화면에서 날아감 (0.016 * 50)
 
+
+
+# 메인 클래스
 class Scene(QGraphicsScene):
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         QGraphicsScene.__init__(self, parent)
 
         # hold the set of keys we're pressing
@@ -177,10 +213,10 @@ class Scene(QGraphicsScene):
         self.timer = QBasicTimer()
         self.timer.start(FRAME_TIME_MS, self)
 
-        bg = BackGround()
         # bg = QGraphicsRectItem()
         # bg.setRect(-1,-1,SCREEN_WIDTH+2,SCREEN_HEIGHT+2)
         # bg.setBrush(QBrush(Qt.black))
+        bg = BackGround()
         self.addItem(bg)
 
         self.player = Player()
@@ -209,8 +245,13 @@ class Scene(QGraphicsScene):
         self.view.setFixedSize(SCREEN_WIDTH,SCREEN_HEIGHT)
         self.setSceneRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT)
 
+        self.ask = AskClose(self)
+
     def keyPressEvent(self, event):
         self.keys_pressed.add(event.key())
+        if event.key() == Qt.Key_Escape:
+            self.ask.show()
+            
 
     def keyReleaseEvent(self, event):
         self.keys_pressed.remove(event.key())
@@ -224,6 +265,9 @@ class Scene(QGraphicsScene):
         for b in self.bullets:
             b.game_update(self.keys_pressed, self.player)
         self.enemy.game_update()
+
+
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
