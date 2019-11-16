@@ -23,5 +23,7 @@ class Player(QGraphicsPixmapItem):
             dy -= PLAYER_SPEED
         if Qt.Key_Down in keys_pressed:
             dy += PLAYER_SPEED
-        self.setPos(self.x()+dx, self.y()+dy)
+        
+        if 0 <= self.x()+dx <= 695 and 0 <= self.y()+dy <= 520:
+            self.setPos(self.x()+dx, self.y()+dy)
         # 지정된 객체의 좌표를 정해준다.

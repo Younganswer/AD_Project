@@ -2,6 +2,7 @@ import os
 os.chdir('C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/YoungSeo')
 import sys
 import random
+from PyQt5.QtMultimedia import QSound
 from PyQt5.QtCore import (
     Qt,
     QBasicTimer

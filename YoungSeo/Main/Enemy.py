@@ -1,6 +1,7 @@
 import random
+from PyQt5.QtMultimedia import QSound
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QGraphicsItem, QGraphicsPixmapItem
+from PyQt5.QtWidgets import QApplication, QGraphicsItem, QGraphicsPixmapItem
 
 SCREEN_WIDTH            = 800
 SCREEN_HEIGHT           = 600
@@ -25,6 +26,8 @@ class Enemy(QGraphicsPixmapItem):
     damage2 = 'PNG/Damage/playerShip2_damage2'
     damage3 = 'PNG/Damage/playerShip3_damage1'
     damageArray.extend([damage1, damage2, damage3])
+
+    sound = QSound('Bonus/sfx_retro_spaceship_explosion.wav')
 
     enemyPosArray = [(0, 0),   (100, 0),   (200, 0),   (300, 0),   (400, 0),   (500, 0),   (600, 0),   (700, 0),
                      (0, 100), (100, 100), (200, 100), (300, 100), (400, 100), (500, 100), (600, 100), (700, 100)]
@@ -52,12 +55,13 @@ class Enemy(QGraphicsPixmapItem):
 
             for i in range(3):
                 if self.x() <= bullets[i].x() <= self.x() + 90 and bullets[i].y() <= self.y() + 50 and self.check == 0:
-                    bullets[0].frames = 0
-                    bullets[1].frames = 0
-                    bullets[2].frames = 0
+                    bullets[0].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                    bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                    bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                     self.frames = 200
                     damage = random.randint(0, 2)
                     self.setPixmap(QPixmap(self.damageArray[damage]))
+                    self.sound.play()
                     exp.score += 1
                     self.check += 1
                     break;
