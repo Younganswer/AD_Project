@@ -30,6 +30,7 @@ from Bullet     import Bullet
 from Enemy      import Enemy
 from Player     import Player
 from EXP        import EXP
+from LifeInfo   import PlayerIcon, XIcon, Life
 
 SCREEN_WIDTH            = 800
 SCREEN_HEIGHT           = 600
@@ -54,22 +55,38 @@ class Scene(QGraphicsScene):
         # hold the set of keys we're pressing
         self.keys_pressed = set()
 
-        # use a timer to get 60Hz refresh (hopefully)
+        # use a timer to get 60Hz refresh (hopefully)  1000 / 16 == 62.5
         self.timer = QBasicTimer()
         self.timer.start(FRAME_TIME_MS, self)
 
         # bg = QGraphicsRectItem()
         # bg.setRect(-1,-1,SCREEN_WIDTH+2,SCREEN_HEIGHT+2)
         # bg.setBrush(QBrush(Qt.black))
+
+        # BackGround
         self.bg = BackGround()
         self.addItem(self.bg)
 
+
+        # Player
         self.player = Player()
         self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2,
                            (SCREEN_HEIGHT-self.player.pixmap().height())/2)
         self.addItem(self.player)
 
 
+        # Player Life
+        self.playerIcon = PlayerIcon()
+        self.xIcon = XIcon()
+        self.life = Life()
+        self.playerIcon.setPos(20, 20)
+        self.xIcon.setPos(60, 25)
+        self.life.setPos(83, 24)
+        self.addItem(self.playerIcon)
+        self.addItem(self.xIcon)
+        self.addItem(self.life)
+
+        # Bullets
         self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
                         Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
                         Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
@@ -77,11 +94,15 @@ class Scene(QGraphicsScene):
             b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
             self.addItem(b)
 
+
+        # Enemies
         self.enemies = [Enemy()]
         self.enemies[0].setPos(SCREEN_WIDTH, 0)
         self.addItem(self.enemies[0])
         self.idx = [0]
 
+
+        # Execution Point
         self.EXP = EXP()
         self.EXP.score = 8
         self.EXP.setPos(SCREEN_WIDTH-40, 20)
