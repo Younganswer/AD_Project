@@ -136,8 +136,9 @@ class Scene(QGraphicsScene):
 
     def game_update(self):
         self.player.game_update(self.keys_pressed, self.enemies[self.idx[0]], self.life)
-        for b in self.bullets:
-            b.game_update(self.keys_pressed, self.player)
+        if not self.player.IS_DEAD:
+            for b in self.bullets:
+                b.game_update(self.keys_pressed, self.player)
         self.enemies[self.idx[0]].game_update(self.enemies, self.idx, self.bullets, self.EXP)
         self.EXP.game_update(self.EXP1)
         self.EXP1.game_update(self.EXP1)

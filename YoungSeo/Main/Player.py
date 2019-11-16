@@ -14,10 +14,10 @@ SCREEN_HEIGHT = 600
 # 플레이어 설정 클래스
 class Player(QGraphicsPixmapItem):
 
-    IS_DEAD = False
     sound = QSound(path+'Bonus/sfx_shieldDown.wav')
 
     def __init__(self, parent=None):
+        self.IS_DEAD = False
         QGraphicsPixmapItem.__init__(self, parent)
         self.setPixmap(QPixmap(path+'PNG/playerShip1_blue.png'))
         self.deadFrame = DEAD_FRAME
@@ -41,14 +41,16 @@ class Player(QGraphicsPixmapItem):
                 self.setPos(self.x()+dx, self.y()+dy)
 
             if (enemy.x() <= self.x() <= enemy.x() + 90 or enemy.x() <= self.x() + 90 <= enemy.x() + 90)\
-                and (enemy.y() <= self.y() <= enemy.y() + 90 or enemy.y() <= self.y() + 90 <= enemy.y() + 90):
+                and (enemy.y() <= self.y() <= enemy.y() + 90 or enemy.y() <= self.y() + 90 <= enemy.y() + 90)\
+                and  enemy.IS_DEAD == False:
+
                 self.setPixmap(QPixmap(path+'PNG/Damage/playerShip1_damage2'))
                 life.life -= 1
                 self.sound.play()
                 self.IS_DEAD = True
 
         elif self.IS_DEAD:
-            dx, dy = 0, 0
+            keys_pressed = []
             self.deadFrame -= 1
             if self.deadFrame < 0:
                 self.setPixmap(QPixmap(path+'PNG/playerShip1_blue.png'))
