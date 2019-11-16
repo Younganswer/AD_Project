@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QGraphicsItem, QGraphicsPixmapItem
 
+path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/YoungSeo/'
 
 
 SCREEN_WIDTH  = 800
@@ -14,11 +15,11 @@ BULLET_FRAMES = 50
 # 총알 설정 클래스
 class Bullet(QGraphicsPixmapItem):
 
-    sound = QSound('Bonus/sfx_laser1.wav')
+    sound = QSound(path+'Bonus/sfx_laser1.wav')
 
     def __init__(self, offset_x, offset_y, parent=None):
         QGraphicsPixmapItem.__init__(self,parent)
-        self.setPixmap(QPixmap('PNG/Lasers/laserBlue07.png'))
+        self.setPixmap(QPixmap(path+'PNG/Lasers/laserBlue07.png'))
         # bullet이미지 할당.
         self.offset_x = offset_x
         self.offset_y = offset_y

@@ -1,11 +1,13 @@
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QGraphicsItem, QGraphicsPixmapItem
 
+path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/YoungSeo/'
+
 class EXP(QGraphicsPixmapItem):
 
-    numArray = ['PNG/UI/numeral0', 'PNG/UI/numeral1', 'PNG/UI/numeral2',
-                'PNG/UI/numeral3', 'PNG/UI/numeral4', 'PNG/UI/numeral5',
-                'PNG/UI/numeral6', 'PNG/UI/numeral7', 'PNG/UI/numeral8', 'PNG/UI/numeral9']
+    numArray = [path+'PNG/UI/numeral0', path+'PNG/UI/numeral1', path+'PNG/UI/numeral2',
+                path+'PNG/UI/numeral3', path+'PNG/UI/numeral4', path+'PNG/UI/numeral5',
+                path+'PNG/UI/numeral6', path+'PNG/UI/numeral7', path+'PNG/UI/numeral8', path+'PNG/UI/numeral9']
 
     def __init__(self, parent=None):
         QGraphicsPixmapItem.__init__(self, parent)

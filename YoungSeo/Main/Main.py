@@ -1,5 +1,3 @@
-import os
-os.chdir('C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/YoungSeo')
 import sys
 import random
 from PyQt5.QtMultimedia import QSound
@@ -137,12 +135,13 @@ class Scene(QGraphicsScene):
         self.update()
 
     def game_update(self):
-        self.player.game_update(self.keys_pressed)
+        self.player.game_update(self.keys_pressed, self.enemies[self.idx[0]], self.life)
         for b in self.bullets:
             b.game_update(self.keys_pressed, self.player)
         self.enemies[self.idx[0]].game_update(self.enemies, self.idx, self.bullets, self.EXP)
         self.EXP.game_update(self.EXP1)
         self.EXP1.game_update(self.EXP1)
+        self.life.game_update()
 
         if self.enemies[-1] == 1:
             self.enemies[-1] = Enemy()
