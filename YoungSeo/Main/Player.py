@@ -14,7 +14,7 @@ SCREEN_HEIGHT = 600
 # 플레이어 설정 클래스
 class Player(QGraphicsPixmapItem):
 
-    sound = QSound(path+'Bonus/sfx_shieldDown.wav')
+    sound = QSound(path+'Bonus/player_death.wav')
 
     def __init__(self, parent=None):
         self.IS_DEAD = False
