@@ -111,7 +111,6 @@ class Scene(QGraphicsScene):
         self.EXP1.setPos(SCREEN_WIDTH-60, 20)
         self.addItem(self.EXP1)
 
-
         self.view = QGraphicsView(self)
         self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
