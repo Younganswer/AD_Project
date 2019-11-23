@@ -29,6 +29,7 @@ from Enemy      import Enemy
 from Player     import Player
 from EXP        import EXP
 from LifeInfo   import PlayerIcon, XIcon, Life
+from Stage      import Stage
 
 SCREEN_WIDTH            = 800
 SCREEN_HEIGHT           = 600
@@ -64,6 +65,10 @@ class Scene(QGraphicsScene):
         # BackGround
         self.bg = BackGround()
         self.addItem(self.bg)
+
+        # Round
+        self.round = Round()
+        self.addItem(self.round)
 
 
         # Player
@@ -134,6 +139,7 @@ class Scene(QGraphicsScene):
         self.update()
 
     def game_update(self):
+        self.round.game_update(self.EXP1.score*10 + self.EXP.score)
         self.player.game_update(self.keys_pressed, self.enemies[self.idx[0]], self.life)
         if not self.player.IS_DEAD:
             for b in self.bullets:
