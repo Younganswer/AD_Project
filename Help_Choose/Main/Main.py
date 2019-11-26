@@ -25,8 +25,9 @@ from PyQt5.QtWidgets import (
 from AskClose   import AskClose
 from BackGround import BackGround
 from Bullet     import Bullet
-from FoodInfo      import FoodInfo
+from FoodInfo   import FoodInfo
 from Player     import Player
+from Select     import Select
 
 SCREEN_WIDTH            = 800
 SCREEN_HEIGHT           = 600
@@ -117,12 +118,36 @@ class Scene(QGraphicsScene):
                     b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                     self.addItem(b)
                 
+                # Select
+                self.foodSelect = Select("PNG/Enemies/enemyBlack1.png")
+                self.foodSelect.str = "FoodScreen"
+                self.foodSelect.setPos(100, 100)
+                self.addItem(self.foodSelect)
+
+                self.customizeSelect = Select("PNG/Enemies/enemyBlue2.png")
+                self.customizeSelect.str = "CustomizeScreen"
+                self.customizeSelect.setPos(600, 100)
+                self.addItem(self.customizeSelect)
+
                 self.initialized = True
             
             else:
                 self.player.game_update(self.keys_pressed)
                 for b in self.bullets:
                     b.game_update(self.keys_pressed, self.player)
+                if self.foodSelect.game_update(self.bullets):
+                    self.screen = self.foodSelect.str
+                    self.initialized = False
+
+                elif self.customizeSelect.game_update(self.bullets):
+                    self.screen = self.customizeSelect.str
+                    self.initialized = False
+        
+        elif self.screen == "FoodScreen":
+            print(self.screen)
+            
+        elif self.screen == "CustomizeScreen":
+            print(self.screen)
                 
 
 if __name__ == '__main__':

@@ -40,3 +40,20 @@ FRAME_TIME_MS           = 16  # ms/frame
 ENEMY_SPONE_X           = 800
 ENEMY_SPONE_Y           = 600
 ENEMY_FRAMES            = 500
+
+path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Help_Choose/'
+
+class Select(QGraphicsPixmapItem):
+
+    def __init__(self, imagePath, parent=None):
+        super().__init__(parent)
+        self.setPixmap(QPixmap(path + imagePath))
+        self.str = ""
+    
+    def game_update(self, bullets):
+        for i in range(len(bullets)):
+            if (self.x() <= bullets[i].x() <= self.x() + self.pixmap().width() and self.y() <= bullets[i].y() <= self.y() + self.pixmap().width()):
+                bullets[0].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                return True
