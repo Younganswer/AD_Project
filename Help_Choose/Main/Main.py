@@ -59,32 +59,14 @@ class Scene(QGraphicsScene):
         # bg.setRect(-1,-1,SCREEN_WIDTH+2,SCREEN_HEIGHT+2)
         # bg.setBrush(QBrush(Qt.black))
 
-        # BackGround
-        self.bg = BackGround()
-        self.addItem(self.bg)
-
-
-        # Player
-        self.player = Player()
-        self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2,
-                           (SCREEN_HEIGHT-self.player.pixmap().height())/2)
-        self.addItem(self.player)
-
-
-        # Bullets
-        self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
-                        Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
-                        Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
-        for b in self.bullets:
-            b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
-            self.addItem(b)
-
+        self.screen = "InitialScreen"
+        self.initialized = False
 
         # Enemies
-        self.enemies = [Enemy()]
-        self.enemies[0].setPos(SCREEN_WIDTH, 0)
-        self.addItem(self.enemies[0])
-        self.idx = [0]
+        # self.enemies = [Enemy()]
+        # self.enemies[0].setPos(SCREEN_WIDTH, 0)
+        # self.addItem(self.enemies[0])
+        # self.idx = [0]
 
 
         self.view = QGraphicsView(self)
@@ -113,19 +95,35 @@ class Scene(QGraphicsScene):
 
 
     def game_update(self):
-        self.player.game_update(self.keys_pressed)
-        if not self.player.IS_DEAD:
-            for b in self.bullets:
-                b.game_update(self.keys_pressed, self.player)
-        self.enemies[self.idx[0]].game_update(self.enemies, self.idx, self.bullets)
-
-        if self.enemies[-1] == 1:
-            self.enemies[-1] = Enemy()
-            self.enemies[-1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
-            self.addItem(self.enemies[-1])
+        if self.screen == "InitialScreen":
+            if not self.initialized:
+                # BackGround
+                self.bg = BackGround()
+                self.addItem(self.bg)
 
 
+                # Player
+                self.player = Player()
+                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2,
+                                   (SCREEN_HEIGHT-self.player.pixmap().height())/2)
+                self.addItem(self.player)
 
+
+                # Bullets
+                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
+                for b in self.bullets:
+                    b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                    self.addItem(b)
+                
+                self.initialized = True
+            
+            else:
+                self.player.game_update(self.keys_pressed)
+                for b in self.bullets:
+                    b.game_update(self.keys_pressed, self.player)
+                
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
