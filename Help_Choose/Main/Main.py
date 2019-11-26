@@ -119,14 +119,14 @@ class Scene(QGraphicsScene):
                     self.addItem(b)
                 
                 # Select
-                self.foodSelect = Select("PNG/Enemies/enemyBlack1.png")
+                self.foodSelect = Select("PNG/fork.png")
                 self.foodSelect.str = "FoodScreen"
                 self.foodSelect.setPos(100, 100)
                 self.addItem(self.foodSelect)
 
-                self.customizeSelect = Select("PNG/Enemies/enemyBlue2.png")
+                self.customizeSelect = Select("PNG/customize.png")
                 self.customizeSelect.str = "CustomizeScreen"
-                self.customizeSelect.setPos(600, 100)
+                self.customizeSelect.setPos(700 - self.customizeSelect.pixmap().width(), 100)
                 self.addItem(self.customizeSelect)
 
                 self.initialized = True
@@ -148,7 +148,7 @@ class Scene(QGraphicsScene):
             
         elif self.screen == "CustomizeScreen":
             print(self.screen)
-                
+            
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
