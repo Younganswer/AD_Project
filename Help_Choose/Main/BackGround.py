@@ -15,9 +15,8 @@ class BackGround(QGraphicsPixmapItem):
     mapDarkBlue = path+'Backgrounds/darkPurple.png'
     mapPurple   = path+'Backgrounds/purple.png'
     mapArray.extend([mapBlack, mapBlue, mapDarkBlue, mapPurple])
+    mapDic = {"Black": mapBlack, "Blue": mapBlue, "DarkBlue": mapDarkBlue, "Purple": mapPurple}
 
-    def __init__(self, parent=None):
+    def __init__(self, mapColor, arent=None):
         super().__init__(parent)
-        mapColor = 0                                        # random.randint(0, 3)
-        self.setPixmap(QPixmap(self.mapArray[mapColor]))
-        self.setPos(0, 0)
+        self.setPixmap(QPixmap(self.mapArray[self.mapDic[mapColor]]))

@@ -61,7 +61,7 @@ class Scene(QGraphicsScene):
         # bg.setBrush(QBrush(Qt.black))
 
         self.screen = "InitialScreen"
-        self.initialized = False
+        self.isInitialized = False
 
         # Enemies
         # self.enemies = [Enemy()]
@@ -97,9 +97,9 @@ class Scene(QGraphicsScene):
 
     def game_update(self):
         if self.screen == "InitialScreen":
-            if not self.initialized:
+            if not self.isInitialized:
                 # BackGround
-                self.bg = BackGround()
+                self.bg = BackGround("Black")
                 self.addItem(self.bg)
 
 
@@ -120,31 +120,59 @@ class Scene(QGraphicsScene):
                 
                 # Select
                 self.foodSelect = Select("PNG/fork.png")
-                self.foodSelect.str = "FoodScreen"
+                self.foodSelect.select = "FoodScreen"
                 self.foodSelect.setPos(100, 100)
                 self.addItem(self.foodSelect)
 
                 self.customizeSelect = Select("PNG/customize.png")
-                self.customizeSelect.str = "CustomizeScreen"
+                self.customizeSelect.select = "CustomizeScreen"
                 self.customizeSelect.setPos(700 - self.customizeSelect.pixmap().width(), 100)
                 self.addItem(self.customizeSelect)
 
-                self.initialized = True
+                self.isInitialized = True
             
             else:
                 self.player.game_update(self.keys_pressed)
                 for b in self.bullets:
                     b.game_update(self.keys_pressed, self.player)
                 if self.foodSelect.game_update(self.bullets):
-                    self.screen = self.foodSelect.str
-                    self.initialized = False
+                    self.screen = self.foodSelect.select
+                    self.isInitialized = False
+                    self.clear()
 
                 elif self.customizeSelect.game_update(self.bullets):
-                    self.screen = self.customizeSelect.str
-                    self.initialized = False
+                    self.screen = self.customizeSelect.select
+                    self.isInitialized = False
+                    self.clear()
         
         elif self.screen == "FoodScreen":
-            print(self.screen)
+            if not self.isInitialized:
+                # BackGround
+                self.bg = BackGround('Blue')
+                self.bg.setPos(0, 0)
+                self.addItem(self.bg)
+
+
+                # Player
+                self.player = Player()
+                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2,
+                                   (SCREEN_HEIGHT-self.player.pixmap().height())/2)
+                self.addItem(self.player)
+
+
+                # Bullets
+                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
+                for b in self.bullets:
+                    b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                    self.addItem(b)
+                
+                # Select
+                
+
+                self.isInitialized = True
+            
             
         elif self.screen == "CustomizeScreen":
             print(self.screen)
