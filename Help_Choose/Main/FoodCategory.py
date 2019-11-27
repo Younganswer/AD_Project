@@ -46,7 +46,15 @@ path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_P
 
 class FoodCategory(QGraphicsPixmapItem):
 
-    def __init__(self, image, parent=None):
-        super().__init__(image, parent)
-        self.setPixmap(QPixmap())
-        self.category = ""
+    def __init__(self, pixmap, category, parent=None):
+        super().__init__(parent)
+        self.setPixmap(QPixmap(path+pixmap))
+        self.category = category
+
+    def game_update(self, bullets):
+        for i in range(len(bullets)):
+            if (self.x() <= bullets[i].x() <= self.x() + self.pixmap().width() and self.y() <= bullets[i].y() <= self.y() + self.pixmap().width()):
+                bullets[0].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                return True

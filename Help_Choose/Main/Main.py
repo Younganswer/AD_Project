@@ -22,12 +22,13 @@ from PyQt5.QtWidgets import (
     QGraphicsView
 )
 
-from AskClose   import AskClose
-from BackGround import BackGround
-from Bullet     import Bullet
-from FoodInfo   import FoodInfo
-from Player     import Player
-from Select     import Select
+from AskClose     import AskClose
+from BackGround   import BackGround
+from Bullet       import Bullet
+from FoodInfo     import FoodInfo
+from Player       import Player
+from Select       import Select
+from FoodCategory import FoodCategory
 
 SCREEN_WIDTH            = 800
 SCREEN_HEIGHT           = 600
@@ -119,13 +120,11 @@ class Scene(QGraphicsScene):
                     self.addItem(b)
                 
                 # Select
-                self.foodSelect = Select("PNG/fork.png")
-                self.foodSelect.select = "FoodScreen"
+                self.foodSelect = Select("PNG/fork.png", "FoodScreen")
                 self.foodSelect.setPos(100, 100)
                 self.addItem(self.foodSelect)
 
-                self.customizeSelect = Select("PNG/customize.png")
-                self.customizeSelect.select = "CustomizeScreen"
+                self.customizeSelect = Select("PNG/customize.png", "CustomizeScreen")
                 self.customizeSelect.setPos(700 - self.customizeSelect.pixmap().width(), 100)
                 self.addItem(self.customizeSelect)
 
@@ -168,12 +167,71 @@ class Scene(QGraphicsScene):
                     b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                     self.addItem(b)
                 
-                # Select
-                
+                # FoodCategory
+                interval = 26.6666666
+                imageWidth = 128
+                self.koreanFood = FoodCategory("PNG/KoreanFood.png", "KoreanFood")
+                self.koreanFood.setPos(interval*1, interval)
+                self.addItem(self.koreanFood)
+
+                self.chineseFood = FoodCategory("PNG/ChineseFood.png", "ChineseFood")
+                self.chineseFood.setPos(interval*2 + imageWidth, interval)
+                self.addItem(self.chineseFood)
+
+                self.japaneseFood = FoodCategory("PNG/JapaneseFood.png", "JapaneseFood")
+                self.japaneseFood.setPos(interval*3 + imageWidth*2, interval)
+                self.addItem(self.japaneseFood)
+
+                self.westernFood = FoodCategory("PNG/WesternFood.png", "WesternFood")
+                self.westernFood.setPos(interval*4 + imageWidth*3, interval)
+                self.addItem(self.westernFood)
+
+                self.allFood = FoodCategory("PNG/customize.png", "AllFood")
+                self.allFood.setPos(interval*5 + imageWidth*4, interval)
+                self.addItem(self.allFood)
 
                 self.isInitialized = True
-            
-            
+
+            else:
+                self.player.game_update(self.keys_pressed)
+                for b in self.bullets:
+                    b.game_update(self.keys_pressed, self.player)
+
+                if self.koreanFood.game_update(self.bullets):
+                    self.screen = self.koreanFood.category
+                    self.isInitialized = False
+                    self.clear()
+
+                elif self.chineseFood.game_update(self.bullets):
+                    self.screen = self.chineseFood.category
+                    self.isInitialized = False
+                    self.clear()
+
+                elif self.japaneseFood.game_update(self.bullets):
+                    self.screen = self.japaneseFood.category
+                    self.isInitialized = False
+                    self.clear()
+
+                elif self.westernFood.game_update(self.bullets):
+                    self.screen = self.westernFood.category
+                    self.isInitialized = False
+                    self.clear()
+                
+                elif self.allFood.game_update(self.bullets):
+                    self.screen = self.allFood.category
+                    self.isInitialized = False
+                    self.clear()
+        
+        elif self.screen == "KoreanFood":
+            pass
+        elif self.screen == "ChineseFood":
+            pass
+        elif self.screen == "JapaneseFood":
+            pass
+        elif self.screen == "WesternFood":
+            pass
+        elif self.screen == "AllFood":
+            pass
         elif self.screen == "CustomizeScreen":
             print(self.screen)
             

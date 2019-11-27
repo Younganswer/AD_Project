@@ -45,10 +45,10 @@ path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_P
 
 class Select(QGraphicsPixmapItem):
 
-    def __init__(self, imagePath, parent=None):
+    def __init__(self, pixmap, select, parent=None):
         super().__init__(parent)
-        self.setPixmap(QPixmap(path + imagePath))
-        self.select = ""
+        self.setPixmap(QPixmap(path+pixmap))
+        self.select = select
     
     def game_update(self, bullets):
         for i in range(len(bullets)):
