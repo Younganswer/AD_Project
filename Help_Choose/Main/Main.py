@@ -25,10 +25,11 @@ from PyQt5.QtWidgets import (
 from AskClose     import AskClose
 from BackGround   import BackGround
 from Bullet       import Bullet
-from FoodInfo     import FoodInfo
 from Player       import Player
 from Select       import Select
 from FoodCategory import FoodCategory
+from FoodInfo     import FoodInfo
+import WholeFood
 
 SCREEN_WIDTH            = 800
 SCREEN_HEIGHT           = 600
@@ -120,11 +121,11 @@ class Scene(QGraphicsScene):
                     self.addItem(b)
                 
                 # Select
-                self.foodSelect = Select("PNG/fork.png", "FoodScreen")
+                self.foodSelect = Select("PNG/Initial_Screen/fork.png", "FoodScreen")
                 self.foodSelect.setPos(100, 100)
                 self.addItem(self.foodSelect)
 
-                self.customizeSelect = Select("PNG/customize.png", "CustomizeScreen")
+                self.customizeSelect = Select("PNG/Initial_Screen/customize.png", "CustomizeScreen")
                 self.customizeSelect.setPos(700 - self.customizeSelect.pixmap().width(), 100)
                 self.addItem(self.customizeSelect)
 
@@ -170,26 +171,28 @@ class Scene(QGraphicsScene):
                 # FoodCategory
                 interval = 26.6666666
                 imageWidth = 128
-                self.koreanFood = FoodCategory("PNG/KoreanFood.png", "KoreanFood")
+                self.koreanFood = FoodCategory("PNG/Category/KoreanFood.png", "KoreanFood")
                 self.koreanFood.setPos(interval*1, interval)
                 self.addItem(self.koreanFood)
 
-                self.chineseFood = FoodCategory("PNG/ChineseFood.png", "ChineseFood")
+                self.chineseFood = FoodCategory("PNG/Category/ChineseFood.png", "ChineseFood")
                 self.chineseFood.setPos(interval*2 + imageWidth, interval)
                 self.addItem(self.chineseFood)
 
-                self.japaneseFood = FoodCategory("PNG/JapaneseFood.png", "JapaneseFood")
+                self.japaneseFood = FoodCategory("PNG/Category/JapaneseFood.png", "JapaneseFood")
                 self.japaneseFood.setPos(interval*3 + imageWidth*2, interval)
                 self.addItem(self.japaneseFood)
 
-                self.westernFood = FoodCategory("PNG/WesternFood.png", "WesternFood")
+                self.westernFood = FoodCategory("PNG/Category/WesternFood.png", "WesternFood")
                 self.westernFood.setPos(interval*4 + imageWidth*3, interval)
                 self.addItem(self.westernFood)
 
-                self.allFood = FoodCategory("PNG/customize.png", "AllFood")
+                self.allFood = FoodCategory("PNG/Category/customize.png", "AllFood")
                 self.allFood.setPos(interval*5 + imageWidth*4, interval)
                 self.addItem(self.allFood)
 
+                interval = None
+                imageWidth = None
                 self.isInitialized = True
 
             else:
@@ -223,15 +226,282 @@ class Scene(QGraphicsScene):
                     self.clear()
         
         elif self.screen == "KoreanFood":
-            pass
+            if not self.isInitialized:
+                # BackGround
+                self.bg = BackGround("DarkBlue")
+                self.addItem(self.bg)
+
+
+                # Player
+                self.player = Player()
+                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2, 450)
+                self.addItem(self.player)
+
+
+                # Bullets
+                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
+                for b in self.bullets:
+                    b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                    self.addItem(b)
+                
+                self.foodList = []
+                # wholeFoodDic = {'koreanFoodDic': koreanFoodDic}
+                # koreanFoodDic = {'bibimbab': bibimbab}
+                # bibimbab = {'image': , :, :}
+                # each == bibimbab
+                for key, value in WholeFood.wholeFoodDic[self.screen].items():
+                    food = FoodInfo(value['image'], key)
+                    self.foodList.append(food)
+                    food = None
+                
+                length = 0
+                for food in self.foodList:
+                    x, y = FoodInfo.foodLocation[length][0], FoodInfo.foodLocation[length][1]
+                    food.setPos(x, y)
+                    food.pos = length
+                    self.addItem(food)
+                    length += 4
+
+                self.isInitialized = True
+            else:
+                self.player.game_update(self.keys_pressed)
+                for b in self.bullets:
+                    b.game_update(self.keys_pressed, self.player)
+
+                for i in range(len(self.foodList)):
+                    if self.foodList[i].game_update(self.bullets):
+                        self.screen = self.foodList[i].food
+                        print(self.screen)
+                        self.isInitialized = False
+                        self.clear()
+                        break
+
+
+            
+            
         elif self.screen == "ChineseFood":
-            pass
+            if not self.isInitialized:
+                # BackGround
+                self.bg = BackGround("DarkBlue")
+                self.addItem(self.bg)
+
+
+                # Player
+                self.player = Player()
+                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2, 450)
+                self.addItem(self.player)
+
+
+                # Bullets
+                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
+                for b in self.bullets:
+                    b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                    self.addItem(b)
+                
+                self.foodList = []
+                # wholeFoodDic = {'koreanFoodDic': koreanFoodDic}
+                # koreanFoodDic = {'bibimbab': bibimbab}
+                # bibimbab = {'image': , :, :}
+                # each == bibimbab
+                for key, value in WholeFood.wholeFoodDic[self.screen].items():
+                    food = FoodInfo(value['image'], key)
+                    self.foodList.append(food)
+                    food = None
+                
+                length = 0
+                for food in self.foodList:
+                    x, y = FoodInfo.foodLocation[length][0], FoodInfo.foodLocation[length][1]
+                    food.setPos(x, y)
+                    food.pos = length
+                    self.addItem(food)
+                    length += 4
+
+                self.isInitialized = True
+            else:
+                self.player.game_update(self.keys_pressed)
+                for b in self.bullets:
+                    b.game_update(self.keys_pressed, self.player)
+
+                for i in range(len(self.foodList)):
+                    if self.foodList[i].game_update(self.bullets):
+                        self.screen = self.foodList[i].food
+                        print(self.screen)
+                        self.isInitialized = False
+                        self.clear()
+                        break
+
         elif self.screen == "JapaneseFood":
-            pass
+            if not self.isInitialized:
+                # BackGround
+                self.bg = BackGround("DarkBlue")
+                self.addItem(self.bg)
+
+
+                # Player
+                self.player = Player()
+                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2,
+                                   (SCREEN_HEIGHT-self.player.pixmap().height())/2)
+                self.addItem(self.player)
+
+
+                # Bullets
+                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
+                for b in self.bullets:
+                    b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                    self.addItem(b)
+                
+                self.foodList = []
+                # wholeFoodDic = {'koreanFoodDic': koreanFoodDic}
+                # koreanFoodDic = {'bibimbab': bibimbab}
+                # bibimbab = {'image': , :, :}
+                # each == bibimbab
+                for key, value in WholeFood.wholeFoodDic[self.screen].items():
+                    print(value['image'])
+                    food = FoodInfo(value['image'], key)
+                    self.foodList.append(food)
+                    food = None
+                
+                length = 0
+                for food in self.foodList:
+                    x, y = FoodInfo.foodLocation[length][0], FoodInfo.foodLocation[length][1]
+                    print(x, y)
+                    food.setPos(x, y)
+                    food.pos = length
+                    self.addItem(food)
+                    length += 4
+
+                self.isInitialized = True
+            else:
+                self.player.game_update(self.keys_pressed)
+                for b in self.bullets:
+                    b.game_update(self.keys_pressed, self.player)
+
+                for i in range(len(self.foodList)):
+                    if self.foodList[i].game_update(self.bullets):
+                        self.screen = self.foodList[i].food
+                        print(self.screen)
+                        self.isInitialized = False
+                        self.clear()
+                        break
+
         elif self.screen == "WesternFood":
-            pass
+            if not self.isInitialized:
+                # BackGround
+                self.bg = BackGround("DarkBlue")
+                self.addItem(self.bg)
+
+
+                # Player
+                self.player = Player()
+                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2,
+                                   (SCREEN_HEIGHT-self.player.pixmap().height())/2)
+                self.addItem(self.player)
+
+
+                # Bullets
+                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
+                for b in self.bullets:
+                    b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                    self.addItem(b)
+                
+                self.foodList = []
+                # wholeFoodDic = {'koreanFoodDic': koreanFoodDic}
+                # koreanFoodDic = {'bibimbab': bibimbab}
+                # bibimbab = {'image': , :, :}
+                # each == bibimbab
+                for key, value in WholeFood.wholeFoodDic[self.screen].items():
+                    print(value['image'])
+                    food = FoodInfo(value['image'], key)
+                    self.foodList.append(food)
+                    food = None
+                
+                length = 0
+                for food in self.foodList:
+                    x, y = FoodInfo.foodLocation[length][0], FoodInfo.foodLocation[length][1]
+                    print(x, y)
+                    food.setPos(x, y)
+                    food.pos = length
+                    self.addItem(food)
+                    length += 4
+
+                self.isInitialized = True
+            else:
+                self.player.game_update(self.keys_pressed)
+                for b in self.bullets:
+                    b.game_update(self.keys_pressed, self.player)
+
+                for i in range(len(self.foodList)):
+                    if self.foodList[i].game_update(self.bullets):
+                        self.screen = self.foodList[i].food
+                        print(self.screen)
+                        self.isInitialized = False
+                        self.clear()
+                        break
+
         elif self.screen == "AllFood":
-            pass
+            if not self.isInitialized:
+                # BackGround
+                self.bg = BackGround("DarkBlue")
+                self.addItem(self.bg)
+
+
+                # Player
+                self.player = Player()
+                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2,
+                                   (SCREEN_HEIGHT-self.player.pixmap().height())/2)
+                self.addItem(self.player)
+
+
+                # Bullets
+                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
+                for b in self.bullets:
+                    b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                    self.addItem(b)
+                
+                self.foodList = []
+                # wholeFoodDic = {'koreanFoodDic': koreanFoodDic}
+                # koreanFoodDic = {'bibimbab': bibimbab}
+                # bibimbab = {'image': , :, :}
+                # each == bibimbab
+                for key, value in WholeFood.wholeFoodDic[self.screen].items():
+                    print(value['image'])
+                    food = FoodInfo(value['image'], key)
+                    self.foodList.append(food)
+                    food = None
+                
+                length = 0
+                for food in self.foodList:
+                    x, y = FoodInfo.foodLocation[length][0], FoodInfo.foodLocation[length][1]
+                    print(x, y)
+                    food.setPos(x, y)
+                    food.pos = length
+                    self.addItem(food)
+                    length += 4
+
+                self.isInitialized = True
+            else:
+                self.player.game_update(self.keys_pressed)
+                for b in self.bullets:
+                    b.game_update(self.keys_pressed, self.player)
+
+                for i in range(len(self.foodList)):
+                    if self.foodList[i].game_update(self.bullets):
+                        self.screen = self.foodList[i].food
+                        print(self.screen)
+                        self.isInitialized = False
+                        self.clear()
+                        break
+
         elif self.screen == "CustomizeScreen":
             print(self.screen)
             
