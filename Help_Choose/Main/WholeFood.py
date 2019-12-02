@@ -38,9 +38,15 @@ japaneseFoodDic["takoyaki"] = takoyaki
 japaneseFoodDic["yakitori"] = yakitori
 
 # Western  Food
-pizza = {"image": "pizza image", "foodInfo": "pizza infomation", "URL": "pizza URL"}
+pizza     = {"image": "PNG/Western_Food/pizza.png",     "foodInfo": "pizza infomation",     "URL": "pizza URL"}
+spaghetti = {"image": "PNG/Western_Food/spaghetti.png", "foodInfo": "spaghetti infomation", "URL": "spaghetti URL"}
+steak     = {"image": "PNG/Western_Food/steak.png",     "foodInfo": "steak infomation",     "URL": "steak URL"}
+burger    = {"image": "PNG/Western_Food/burger.png",    "foodInfo": "burger infomation",    "URL": "burger URL"}
 
-westernFoodDic["pizza"]   = pizza
+westernFoodDic["pizza"]     = pizza
+westernFoodDic["spaghetti"] = spaghetti
+westernFoodDic["steak"]     = steak
+westernFoodDic["burger"]    = burger
 
 wholeFoodDic["KoreanFood"]   = koreanFoodDic
 wholeFoodDic["ChineseFood"]  = chineseFoodDic
