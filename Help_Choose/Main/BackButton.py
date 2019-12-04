@@ -22,11 +22,14 @@ from PyQt5.QtWidgets import (
     QGraphicsView
 )
 
-from AskClose   import AskClose
-from BackGround import BackGround
-from Bullet     import Bullet
-from FoodInfo      import FoodInfo
-from Player     import Player
+from AskClose     import AskClose
+from BackGround   import BackGround
+from Bullet       import Bullet
+from Player       import Player
+from Select       import Select
+from FoodCategory import FoodCategory
+from FoodInfo     import FoodInfo
+import WholeFood
 
 SCREEN_WIDTH            = 800
 SCREEN_HEIGHT           = 600
@@ -43,13 +46,13 @@ ENEMY_FRAMES            = 500
 
 path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Help_Choose/'
 
-class Select(QGraphicsPixmapItem):
 
-    def __init__(self, pixmap, select, parent=None):
+class BackButton(QGraphicsPixmapItem):
+
+    def __init__(self, parent=None):
         super().__init__(parent)
-        self.setPixmap(QPixmap(path+pixmap))
-        self.select = select
-    
+        self.setPixmap(QPixmap(path+'PNG/Back_Button/opened-door-aperture.png'))
+
     def game_update(self, bullets):
         for i in range(len(bullets)):
             if (self.x() <= bullets[i].x() <= self.x() + self.pixmap().width() and bullets[i].y() <= self.y() + self.pixmap().height() + 50):

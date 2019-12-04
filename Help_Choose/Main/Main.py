@@ -29,6 +29,7 @@ from Player       import Player
 from Select       import Select
 from FoodCategory import FoodCategory
 from FoodInfo     import FoodInfo
+from BackButton   import BackButton
 import WholeFood
 
 SCREEN_WIDTH            = 800
@@ -129,6 +130,11 @@ class Scene(QGraphicsScene):
                 self.customizeSelect.setPos(700 - self.customizeSelect.pixmap().width(), 100)
                 self.addItem(self.customizeSelect)
 
+                # BackButton
+                self.backButton = BackButton()
+                self.backButton.setPos(10, 20)
+                self.addItem(self.backButton)
+
                 self.isInitialized = True
             
             else:
@@ -193,6 +199,12 @@ class Scene(QGraphicsScene):
 
                 interval = None
                 imageWidth = None
+
+                # BackButton
+                self.backButton = BackButton()
+                self.backButton.setPos(10, 20)
+                self.addItem(self.backButton)
+
                 self.isInitialized = True
 
             else:
@@ -222,6 +234,11 @@ class Scene(QGraphicsScene):
                 
                 elif self.allFood.game_update(self.bullets):
                     self.screen = self.allFood.category
+                    self.isInitialized = False
+                    self.clear()
+                
+                elif self.backButton.game_update(self.bullets):
+                    self.screen = "InitialScreen"
                     self.isInitialized = False
                     self.clear()
         
@@ -264,7 +281,13 @@ class Scene(QGraphicsScene):
                     self.addItem(food)
                     length += len(FoodInfo.foodLocation) // len(self.foodList)
 
+                # BackButton
+                self.backButton = BackButton()
+                self.backButton.setPos(10, 20)
+                self.addItem(self.backButton)
+
                 self.isInitialized = True
+
             else:
                 self.player.game_update(self.keys_pressed)
                 for b in self.bullets:
@@ -278,9 +301,12 @@ class Scene(QGraphicsScene):
                         self.clear()
                         break
 
+                if self.backButton.game_update(self.bullets):
+                    self.screen = "FoodScreen"
+                    self.isInitialized = False
+                    self.clear()
 
-            
-            
+
         elif self.screen == "ChineseFood":
             if not self.isInitialized:
                 # BackGround
@@ -320,7 +346,13 @@ class Scene(QGraphicsScene):
                     self.addItem(food)
                     length += len(FoodInfo.foodLocation) // len(self.foodList)
 
+                # BackButton
+                self.backButton = BackButton()
+                self.backButton.setPos(10, 20)
+                self.addItem(self.backButton)
+
                 self.isInitialized = True
+
             else:
                 self.player.game_update(self.keys_pressed)
                 for b in self.bullets:
@@ -333,6 +365,11 @@ class Scene(QGraphicsScene):
                         self.isInitialized = False
                         self.clear()
                         break
+                
+                if self.backButton.game_update(self.bullets):
+                    self.screen = "FoodScreen"
+                    self.isInitialized = False
+                    self.clear()
 
         elif self.screen == "JapaneseFood":
             if not self.isInitialized:
@@ -373,7 +410,13 @@ class Scene(QGraphicsScene):
                     self.addItem(food)
                     length += len(FoodInfo.foodLocation) // len(self.foodList)
 
+                # BackButton
+                self.backButton = BackButton()
+                self.backButton.setPos(10, 20)
+                self.addItem(self.backButton)
+
                 self.isInitialized = True
+
             else:
                 self.player.game_update(self.keys_pressed)
                 for b in self.bullets:
@@ -386,6 +429,11 @@ class Scene(QGraphicsScene):
                         self.isInitialized = False
                         self.clear()
                         break
+                
+                if self.backButton.game_update(self.bullets):
+                    self.screen = "FoodScreen"
+                    self.isInitialized = False
+                    self.clear()
 
         elif self.screen == "WesternFood":
             if not self.isInitialized:
@@ -426,7 +474,13 @@ class Scene(QGraphicsScene):
                     self.addItem(food)
                     length += len(FoodInfo.foodLocation) // len(self.foodList)
 
+                # BackButton
+                self.backButton = BackButton()
+                self.backButton.setPos(10, 20)
+                self.addItem(self.backButton)
+
                 self.isInitialized = True
+
             else:
                 self.player.game_update(self.keys_pressed)
                 for b in self.bullets:
@@ -439,6 +493,11 @@ class Scene(QGraphicsScene):
                         self.isInitialized = False
                         self.clear()
                         break
+                
+                if self.backButton.game_update(self.bullets):
+                    self.screen = "FoodScreen"
+                    self.isInitialized = False
+                    self.clear()
 
         elif self.screen == "AllFood":
             if not self.isInitialized:
@@ -480,7 +539,13 @@ class Scene(QGraphicsScene):
                     self.addItem(food)
                     length += len(FoodInfo.foodLocation) // len(self.foodList)
 
+                # BackButton
+                self.backButton = BackButton()
+                self.backButton.setPos(10, 20)
+                self.addItem(self.backButton)
+
                 self.isInitialized = True
+
             else:
                 self.player.game_update(self.keys_pressed)
                 for b in self.bullets:
@@ -493,60 +558,14 @@ class Scene(QGraphicsScene):
                         self.isInitialized = False
                         self.clear()
                         break
+                
+                if self.backButton.game_update(self.bullets):
+                    self.screen = "FoodScreen"
+                    self.isInitialized = False
+                    self.clear()
 
         elif self.screen == "CustomizeScreen":
-            if not self.isInitialized:
-                # BackGround
-                self.bg = BackGround("DarkBlue")
-                self.addItem(self.bg)
-
-
-                # Player
-                self.player = Player()
-                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2, 500)
-                self.addItem(self.player)
-
-
-                # Bullets
-                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
-                for b in self.bullets:
-                    b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
-                    self.addItem(b)
-                
-                self.foodList = []
-                # wholeFoodDic = {'koreanFoodDic': koreanFoodDic}
-                # koreanFoodDic = {'bibimbab': bibimbab}
-                # bibimbab = {'image': , :, :}
-                # each == bibimbab
-                for each in WholeFood.wholeFoodDic.values():
-                    for key, value in each.items():
-                        food = FoodInfo(value['image'], key)
-                        self.foodList.append(food)
-                        food = None
-                
-                length = 0
-                for food in self.foodList:
-                    x, y = FoodInfo.foodLocation[length][0], FoodInfo.foodLocation[length][1]
-                    food.setPos(x, y)
-                    food.pos = length
-                    self.addItem(food)
-                    length += len(FoodInfo.foodLocation) // len(self.foodList)
-
-                self.isInitialized = True
-            else:
-                self.player.game_update(self.keys_pressed)
-                for b in self.bullets:
-                    b.game_update(self.keys_pressed, self.player)
-
-                for i in range(len(self.foodList)):
-                    if self.foodList[i].game_update(self.bullets):
-                        self.screen = self.foodList[i].food
-                        print(self.screen)
-                        self.isInitialized = False
-                        self.clear()
-                        break
+            print(self.screen)
             
 
 if __name__ == '__main__':

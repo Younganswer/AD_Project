@@ -38,7 +38,7 @@ class FoodInfo(QGraphicsPixmapItem):
         x, y = self.foodLocation[self.pos][0], self.foodLocation[self.pos][1]
         self.setPos(x, y)
         for i in range(len(bullets)):
-            if (self.x() <= bullets[i].x() <= self.x() + self.pixmap().width() and self.y() <= bullets[i].y() <= self.y() + self.pixmap().width()):
+            if (self.x() <= bullets[i].x() <= self.x() + self.pixmap().width() and bullets[i].y() <= self.y() + self.pixmap().height() + 50):
                 bullets[0].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
