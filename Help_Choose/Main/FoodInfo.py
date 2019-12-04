@@ -19,12 +19,11 @@ dy=15
 # 음식 설정 클래스
 class FoodInfo(QGraphicsPixmapItem):
 
-    sound = QSound(path+'Bonus/sfx_retro_spaceship_explosion.wav')
+    sound = QSound(path+'Bonus/sfx_retro_spaceship_explosion.wav')  
     foodLocation = [(100, 100), (100+dx, 100-dy), (100+dx*2, 100-dy*2), (100+dx*3, 100-dy*3),
                     (700-imageWidth-dx*3, 100-dy*3), (700-imageWidth-dx*2, 100-dy*2), (700-imageWidth-dx, 100-dy), (700-imageWidth, 100),
                     (700-imageWidth, 164), (700-imageWidth-dx, 164+dy), (700-imageWidth-dx*2, 164+dy*2), (700-imageWidth-dx*3, 164+dy*3),
-                    (100+dx*3, 100+dy*3), (100+dx*2, 100+dy*2), (100+dx, 164+dy), (100, 164)]
-                
+                    (100+dx*3, 100+dy*3), (100+dx*2, 100+dy*2), (100+dx, 164+dy), (100, 164)]          
                           
     def __init__(self, image, food, parent=None):
         super().__init__(parent)
