@@ -53,7 +53,7 @@ class Select(QGraphicsPixmapItem):
     
     def game_update(self, bullets):
         for i in range(len(bullets)):
-            if (self.x() <= bullets[i].x() <= self.x() + self.pixmap().width() and bullets[i].y() <= self.y() + self.pixmap().height() + 30):
+            if (self.x() <= bullets[i].x() <= self.x() + self.pixmap().width() and bullets[i].y() <= self.y() + self.pixmap().height()):
                 bullets[0].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)

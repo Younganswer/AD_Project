@@ -40,7 +40,7 @@ class FoodChoose(QGraphicsPixmapItem):
         x, y = self.foodLocation[self.pos][0], self.foodLocation[self.pos][1]
         self.setPos(x, y)
         for i in range(len(bullets)):
-            if (self.x() <= bullets[i].x() <= self.x() + self.pixmap().width() and bullets[i].y() <= self.y() + self.pixmap().height() + 30):
+            if (self.x() <= bullets[i].x() <= self.x() + self.pixmap().width() and bullets[i].y() <= self.y() + self.pixmap().height()):
                 bullets[0].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)

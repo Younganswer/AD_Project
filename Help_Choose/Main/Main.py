@@ -160,8 +160,7 @@ class Scene(QGraphicsScene):
 
                 # Player
                 self.player = Player()
-                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2,
-                                   (SCREEN_HEIGHT-self.player.pixmap().height())/2)
+                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2, 500)
                 self.addItem(self.player)
 
 
@@ -174,26 +173,26 @@ class Scene(QGraphicsScene):
                     self.addItem(b)
                 
                 # FoodCategory
-                interval = 26.6666666
-                imageWidth = 128
+                interval = 33.333333333
+                imageWidth = 100
                 self.koreanFood = FoodCategory("PNG/Category/KoreanFood.png", "KoreanFood", self)
-                self.koreanFood.setPos(interval*1, interval)
+                self.koreanFood.setPos(100+interval, interval)
                 self.addItem(self.koreanFood)
 
                 self.chineseFood = FoodCategory("PNG/Category/ChineseFood.png", "ChineseFood", self)
-                self.chineseFood.setPos(interval*2 + imageWidth, interval)
+                self.chineseFood.setPos(100+interval*2 + imageWidth, interval)
                 self.addItem(self.chineseFood)
 
                 self.japaneseFood = FoodCategory("PNG/Category/JapaneseFood.png", "JapaneseFood", self)
-                self.japaneseFood.setPos(interval*3 + imageWidth*2, interval)
+                self.japaneseFood.setPos(100+interval*3 + imageWidth*2, interval)
                 self.addItem(self.japaneseFood)
 
                 self.westernFood = FoodCategory("PNG/Category/WesternFood.png", "WesternFood", self)
-                self.westernFood.setPos(interval*4 + imageWidth*3, interval)
+                self.westernFood.setPos(100+interval*4 + imageWidth*3, interval)
                 self.addItem(self.westernFood)
 
                 self.allFood = FoodCategory("PNG/Category/customize.png", "AllFood", self)
-                self.allFood.setPos(interval*5 + imageWidth*4, interval)
+                self.allFood.setPos(100+interval*5 + imageWidth*4, interval)
                 self.addItem(self.allFood)
 
                 interval = None
@@ -285,6 +284,7 @@ class Scene(QGraphicsScene):
 
                 for i in range(len(self.foodList)):
                     if self.foodList[i].game_update(self.bullets):
+                        print(self.screen)
                         break
 
 
@@ -551,15 +551,15 @@ class Scene(QGraphicsScene):
                 self.addItem(self.foodImage)
 
                 self.homeButton = Home(self)
-                self.homeButton.setPos(138, 300)
+                self.homeButton.setPos(200-self.homeButton.pixmap().width()//2, 300)
                 self.addItem(self.homeButton)
 
                 self.retryButton = Retry(self)
-                self.retryButton.setPos(138+128+70, 300)
+                self.retryButton.setPos(400-self.retryButton.pixmap().width()//2, 300)
                 self.addItem(self.retryButton)
                 
                 self.openUrlButton = OpenURL(self)
-                self.openUrlButton.setPos(138+128*2+70*2, 300)
+                self.openUrlButton.setPos(600-self.openUrlButton.pixmap().width()//2, 300)
                 self.addItem(self.openUrlButton)
 
                 self.isInitialized = True

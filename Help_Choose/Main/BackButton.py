@@ -60,6 +60,8 @@ class BackButton(QGraphicsPixmapItem):
                 bullets[0].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                if self.main.isAllFood:
+                    self.main.isAllFood = False
                 self.main.screen = self.main.previousScreen[self.main.screen]
                 self.main.isInitialized = False
                 self.main.clear()
