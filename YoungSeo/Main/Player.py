@@ -3,11 +3,10 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QGraphicsItem, QGraphicsPixmapItem
 
-path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/YoungSeo/'
+path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Youngseo/'
 
 
-PLAYER_SPEED  = 3   # pix/frame
-DEAD_FRAME    = 3000 / 16
+PLAYER_SPEED  = 4   # pix/frame
 SCREEN_WIDTH  = 800
 SCREEN_HEIGHT = 600
 
@@ -18,12 +17,11 @@ class Player(QGraphicsPixmapItem):
 
     def __init__(self, parent=None):
         self.IS_DEAD = False
-        QGraphicsPixmapItem.__init__(self, parent)
-        self.setPixmap(QPixmap(path+'PNG/playerShip1_blue.png'))
-        self.deadFrame = DEAD_FRAME
+        super().__init__(parent)
+        self.setPixmap(QPixmap(path+'PNG/Player_Images/playerShip1_blue.png'))
         # Player로 만들어진 객체에 image를 옮겨준다. QPixmap클래스의 메소드.
 
-    def game_update(self, keys_pressed, enemy, life):
+    def game_update(self, keys_pressed):
         dx = 0
         dy = 0
         if Qt.Key_Left in keys_pressed:
@@ -34,27 +32,6 @@ class Player(QGraphicsPixmapItem):
             dy -= PLAYER_SPEED
         if Qt.Key_Down in keys_pressed:
             dy += PLAYER_SPEED
-        
-        if not self.IS_DEAD:
 
-            if 0 <= self.x()+dx <= 695 and 0 <= self.y()+dy <= 520:
-                self.setPos(self.x()+dx, self.y()+dy)
-
-            if (enemy.x() <= self.x() <= enemy.x() + 90 or enemy.x() <= self.x() + 90 <= enemy.x() + 90)\
-                and (enemy.y() <= self.y() <= enemy.y() + 90 or enemy.y() <= self.y() + 90 <= enemy.y() + 90)\
-                and  enemy.IS_DEAD == False:
-
-                self.setPixmap(QPixmap(path+'PNG/Damage/playerShip1_damage2'))
-                life.life -= 1
-                self.sound.play()
-                self.IS_DEAD = True
-
-        elif self.IS_DEAD:
-            keys_pressed = []
-            self.deadFrame -= 1
-            if self.deadFrame < 0:
-                self.setPixmap(QPixmap(path+'PNG/playerShip1_blue.png'))
-                self.setPos((SCREEN_WIDTH-self.pixmap().width())/2,
-                            (SCREEN_HEIGHT-self.pixmap().height())/2)
-                self.deadFrame = DEAD_FRAME
-                self.IS_DEAD = False
+        if 0 <= self.x()+dx <= 695 and 0 <= self.y()+dy <= 520:
+            self.setPos(self.x()+dx, self.y()+dy)

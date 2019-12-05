@@ -22,15 +22,16 @@ from PyQt5.QtWidgets import (
     QGraphicsView
 )
 
-from AskClose     import AskClose
-from BackGround   import BackGround
-from Bullet       import Bullet
-from Player       import Player
-from Select       import Select
-from FoodCategory import FoodCategory
-from FoodChoose   import FoodChoose
-from BackButton   import BackButton
-from FoodInfo     import FoodInfo, Retry, Home, OpenURL
+from AskClose        import AskClose
+from BackGround      import BackGround
+from Bullet          import Bullet
+from Player          import Player
+from Select          import Select
+from FoodCategory    import FoodCategory
+from FoodChoose      import FoodChoose
+from BackButton      import BackButton
+from CustomizeScreen import CustomizeScreen
+from FoodInfo        import FoodInfo, Retry, Home, OpenURL
 import WholeFood
 
 SCREEN_WIDTH            = 800
@@ -580,7 +581,7 @@ class Scene(QGraphicsScene):
                 
 
         elif self.screen == "CustomizeScreen":
-            print(self.screen)
+            pass
             
 
 if __name__ == '__main__':
