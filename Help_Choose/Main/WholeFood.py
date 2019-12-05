@@ -4,7 +4,7 @@ chineseFoodDic  = {}
 japaneseFoodDic = {}
 westernFoodDic  = {}
 
-# Korean   Food
+# KoreanFood
 bibimbab = {"image": "PNG/Korean_Food/bibimbab.png", "foodInfo": "bibimbab infomation", "URL": "bibimbab URL"}
 soju     = {"image": "PNG/Korean_Food/soju.png",     "foodInfo": "soju infomation",     "URL": "soju URL"}
 tukkochi = {"image": "PNG/Korean_Food/tukkochi.png", "foodInfo": "tukkochi infomation", "URL": "tukkochi URL"}
@@ -15,7 +15,7 @@ koreanFoodDic["soju"]     = soju
 koreanFoodDic["tukkochi"] = tukkochi
 koreanFoodDic["ramen"]    = ramen
 
-# Chinese  Food
+# ChineseFood
 tanghulu = {"image": "PNG/Chinese_Food/tanghulu", "foodInfo": "tanghulu infomation", "URL": "tanghulu URL"}
 baozi =    {"image": "PNG/Chinese_Food/baozi",    "foodInfo": "baozi infomation",    "URL": "baozi URL"}
 noodles =  {"image": "PNG/Chinese_Food/noodles",  "foodInfo": "noodles infomation",  "URL": "noodles URL"}
@@ -26,7 +26,7 @@ chineseFoodDic["baozi"]    = baozi
 chineseFoodDic["noodles"]  = noodles
 chineseFoodDic["tea"]      = tea
 
-# Japanese Food
+# JapaneseFood
 sushi    = {"image": "PNG/Japanese_Food/sushi",    "foodInfo": "sushi infomation",    "URL": "sushi URL"}
 tempura  = {"image": "PNG/Japanese_Food/tempura",  "foodInfo": "tempura infomation",  "URL": "tempura URL"}
 takoyaki = {"image": "PNG/Japanese_Food/takoyaki", "foodInfo": "takoyaki infomation", "URL": "takoyaki URL"}
@@ -37,7 +37,7 @@ japaneseFoodDic["tempura"]  = tempura
 japaneseFoodDic["takoyaki"] = takoyaki
 japaneseFoodDic["yakitori"] = yakitori
 
-# Western  Food
+# WesternFood
 pizza     = {"image": "PNG/Western_Food/pizza.png",     "foodInfo": "pizza infomation",     "URL": "pizza URL"}
 spaghetti = {"image": "PNG/Western_Food/spaghetti.png", "foodInfo": "spaghetti infomation", "URL": "spaghetti URL"}
 steak     = {"image": "PNG/Western_Food/steak.png",     "foodInfo": "steak infomation",     "URL": "steak URL"}
@@ -52,3 +52,11 @@ wholeFoodDic["KoreanFood"]   = koreanFoodDic
 wholeFoodDic["ChineseFood"]  = chineseFoodDic
 wholeFoodDic["JapaneseFood"] = japaneseFoodDic
 wholeFoodDic["WesternFood"]  = westernFoodDic
+
+wholeFoodList = []
+for value in wholeFoodDic.values():
+    for key in value.keys():
+        wholeFoodList.append(key)
+
+if __name__ == '__main__':
+    print(wholeFoodList)

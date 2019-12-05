@@ -25,7 +25,7 @@ from PyQt5.QtWidgets import (
 from AskClose   import AskClose
 from BackGround import BackGround
 from Bullet     import Bullet
-from FoodInfo   import FoodInfo
+from FoodChoose import FoodChoose
 from Player     import Player
 from Select     import Select
 
@@ -46,15 +46,19 @@ path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_P
 
 class FoodCategory(QGraphicsPixmapItem):
 
-    def __init__(self, pixmap, category, parent=None):
+    def __init__(self, pixmap, category, main, parent=None):
         super().__init__(parent)
         self.setPixmap(QPixmap(path+pixmap))
         self.category = category
+        self.main = main
 
     def game_update(self, bullets):
         for i in range(len(bullets)):
-            if (self.x() <= bullets[i].x() <= self.x() + self.pixmap().width() and bullets[i].y() <= self.y() + self.pixmap().height() + 50):
+            if (self.x() <= bullets[i].x() <= self.x() + self.pixmap().width() and bullets[i].y() <= self.y() + self.pixmap().height() + 30):
                 bullets[0].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                self.main.screen = self.category
+                self.main.isInitialized = False
+                self.main.clear()
                 return True
