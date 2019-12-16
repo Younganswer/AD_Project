@@ -8,7 +8,8 @@ from PyQt5.QtCore import (
 )
 from PyQt5.QtGui import (
     QBrush,
-    QPixmap
+    QPixmap,
+    QIcon
 )
 from PyQt5.QtWidgets import (
     QApplication,
@@ -89,6 +90,9 @@ class Scene(QGraphicsScene):
         self.view = QGraphicsView(self)
         self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.view.setWindowTitle("Help_Choose")
+        self.view.setWindowIcon(QIcon("C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Youngseo/PNG/UI/AirPods.png"))
+        # self.view.setWindowFlags()
         self.view.show()
         self.view.setFixedSize(SCREEN_WIDTH,SCREEN_HEIGHT)
         self.setSceneRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT)
@@ -574,6 +578,8 @@ class Scene(QGraphicsScene):
                 self.player.game_update(self.keys_pressed)
                 for b in self.bullets:
                     b.game_update(self.keys_pressed, self.player)
+                self.addText("Hello World").setPos(300, 100)
+                # self.setPos(a)
 
                 if self.homeButton.game_update(self.bullets):
                     return
