@@ -63,14 +63,14 @@ class Retry(QGraphicsPixmapItem):
         self.setPixmap(QPixmap(path+'PNG/Food_Info/retry.png'))
         self.main = main
     
-    def game_update(self, bullets, isAllFood):
+    def game_update(self, bullets):
         for i in range(len(bullets)):
             if (self.x() <= bullets[i].x() <= self.x() + self.pixmap().width() and bullets[i].y() <= self.y() + self.pixmap().height()):
                 bullets[0].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 self.main.screen = self.main.previousScreen[self.main.screen]
-                if isAllFood:
+                if self.main.isAllFood:
                     self.main.screen = "AllFood"
                 self.main.isAllFood     = False
                 self.main.isInitialized = False
@@ -91,6 +91,7 @@ class Home(QGraphicsPixmapItem):
                 bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 self.main.screen = "InitialScreen"
+                self.main.isAllFood     = False
                 self.main.isInitialized = False
                 self.main.clear()
                 return True
