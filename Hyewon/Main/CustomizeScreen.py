@@ -1,3 +1,6 @@
+# status를 이용해서 최소 3개이상 이니셜 되어 있어야 한다고 표시
+
+
 import sys
 from PyQt5.QtWidgets import (QWidget, QPushButton,
     QHBoxLayout, QVBoxLayout, QApplication, QLabel,
@@ -8,13 +11,13 @@ from PyQt5.QtCore import Qt
 class CustomizeScreen(QWidget):
     def __init__(self):
         super().__init__()
-        self.initUI()
 
     def initUI(self):
         self.setGeometry(300,300,400,100)
         self.setWindowTitle('Customize Screen')
         # grid = QGridLayout()
         # self.setLayout(grid)
+        self.initialized = 3
 
         self.lbl1 = QLabel('입력: ')
         self.lbl2 = QLabel('입력: ')
@@ -50,8 +53,8 @@ class CustomizeScreen(QWidget):
         self.delButton10 = QPushButton("Del")
 
         self.addButton = QPushButton("Add")
-        saveButton = QPushButton("Save")
-        cancelButton = QPushButton("Cancel")
+        self.saveButton = QPushButton("Save")
+        self.cancelButton = QPushButton("Cancel")
 
 
         self.hbox1 = QHBoxLayout()
@@ -116,31 +119,34 @@ class CustomizeScreen(QWidget):
         self.hbox10.addWidget(self.delButton10)
 
         self.hbox11.addWidget(self.addButton)
-        self.hbox12.addWidget(saveButton)
-        self.hbox12.addWidget(cancelButton)
+        self.hbox12.addWidget(self.saveButton)
+        self.hbox12.addWidget(self.cancelButton)
 
         self.addButton.clicked.connect(self.Click_addButton)
-        saveButton.clicked.connect(self.Click_saveButton)
-        cancelButton.clicked.connect(self.Click_cancelButton)
+        self.saveButton.clicked.connect(self.Click_saveButton)
+        self.cancelButton.clicked.connect(self.Click_cancelButton)
 
+        self.infoDic = {0: {'del': self.delButton1, 'le': self.LE1, 'lbl': self.lbl1, 'hbox': self.hbox1},
+                        1: {'del': self.delButton2, 'le': self.LE2, 'lbl': self.lbl2, 'hbox': self.hbox2},
+                        2: {'del': self.delButton3, 'le': self.LE3, 'lbl': self.lbl3, 'hbox': self.hbox3},
+                        3: {'del': self.delButton4, 'le': self.LE4, 'lbl': self.lbl4, 'hbox': self.hbox4},
+                        4: {'del': self.delButton5, 'le': self.LE5, 'lbl': self.lbl5, 'hbox': self.hbox5},
+                        5: {'del': self.delButton6, 'le': self.LE6, 'lbl': self.lbl6, 'hbox': self.hbox6},
+                        6: {'del': self.delButton7, 'le': self.LE7, 'lbl': self.lbl7, 'hbox': self.hbox7},
+                        7: {'del': self.delButton8, 'le': self.LE8, 'lbl': self.lbl8, 'hbox': self.hbox8},
+                        8: {'del': self.delButton9, 'le': self.LE9, 'lbl': self.lbl9, 'hbox': self.hbox9},
+                        9: {'del': self.delButton10, 'le': self.LE10, 'lbl': self.lbl10, 'hbox': self.hbox10}}
 
-        self.delButtonList = [self.delButton1, self.delButton2, self.delButton3, self.delButton4, self.delButton5, self.delButton6, self.delButton7, self.delButton7, self.delButton8, self.delButton9, self.delButton10]
-        self.LEList = [self.LE1, self.LE2, self.LE3, self.LE4, self.LE5, self.LE6, self.LE7, self.LE8, self.LE9, self.LE10]
-        self.lblList = [self.lbl1, self.lbl2, self.lbl3, self.lbl4, self.lbl5, self.lbl6, self.lbl7, self.lbl8, self.lbl9, self.lbl10]
+        self.initializedList = []
+        for i in range(3):
+            self.initializedList.append(self.infoDic[i]['hbox'])
+        for i in range(3, 10):
+            self.infoDic[i]['del'].hide()
+            self.infoDic[i]['le'].hide()
+            self.infoDic[i]['lbl'].hide()
 
-        #button.clicked.connect(lambda state, x=idx: self.button_pushed(x))
-        for idx in range(10):
-            self.delButtonList[idx].clicked.connect(lambda state,x=idx:self.Click_delButton(x))
-        # self.delButton1.clicked.connect(lambda state, x=idx: self.Click_delBuuton(x))
-        # self.delButton2.clicked.connect(self.Click_delButton2)
-        # self.delButton3.clicked.connect(self.Click_delButton3)
-        # self.delButton4.clicked.connect(self.Click_delButton4)
-        # self.delButton5.clicked.connect(self.Click_delButton5)
-        # self.delButton6.clicked.connect(self.Click_delButton6)
-        # self.delButton7.clicked.connect(self.Click_delButton7)
-        # self.delButton8.clicked.connect(self.Click_delButton8)
-        # self.delButton9.clicked.connect(self.Click_delButton9)
-        # self.delButton10.clicked.connect(self.Click_delButton10)
+        for i in range(len(self.infoDic)):
+            self.infoDic[i]['del'].clicked.connect(lambda state, x=i: self.Click_delButton(x))
 
         self.setLayout(self.vbox3)
         self.show()
@@ -148,82 +154,49 @@ class CustomizeScreen(QWidget):
         self.customizeList = []
 
     def Click_addButton(self):
-        #리스트에 넣기, 클래스 이용
-        if (self.initialized<10):
-            self.vbox1.addLayout(self.hboxList[self.initialized])
-            self.initialized+=1
-        else:
+        if self.initialized < 10:
+            for i in range(len(self.infoDic)):
+                if self.infoDic[i]['hbox'] not in self.initializedList:
+                    self.initializedList.append(self.infoDic[i]['hbox'])
+                    self.vbox1.addLayout(self.infoDic[i]['hbox'])
+                    self.infoDic[i]['del'].show()
+                    self.infoDic[i]['le'].show()
+                    self.infoDic[i]['lbl'].show()
+                    self.initialized += 1
+                    break
+
+        if self.initialized >= 10:
             self.addButton.hide()
             self.vbox2.removeItem(self.hbox11)
 
+        print(self.initialized)
+
     def Click_delButton(self, x):
-        self.LEList[x].setText("")
-        self.LEList[x].hide()
-        self.lblList[x].hide()
-        self.delButtonList[x].hide()
-        self.vbox1.removeItem(self.hboxList[x])
-        self.addButton.show()
-        self.LEList.append(self.LEList[x])
-        self.lblList.append(self.lblList[x])
-        self.delButtonList.append(self.delButtonList[x])
-        del self.LEList[x]
-        del self.lblList[x]
-        del self.delButtonList[x]
+        if self.initialized > 3:
+            self.infoDic[x]['le'].setText("")
+            self.infoDic[x]['le'].hide()
+            self.infoDic[x]['lbl'].hide()
+            self.infoDic[x]['del'].hide()
+            self.vbox1.removeItem(self.infoDic[x]['hbox'])
+            self.initializedList.remove(self.infoDic[x]['hbox'])
 
+        else:
+            print("It has to more than 3.")
+            return
 
-    # def Click_delButton2(self):
-    #     pass
-    #
-    # def Click_delButton3(self):
-    #     pass
-    #
-    # def Click_delButton4(self):
-    #     self.LE4.setText("")
-    #     self.vbox1.removeItem(self.hbox4)
-    #     self.LE4.hide()
-    #     self.lbl4.hide()
-    #     self.delButton4.hide()
-    #     self.addButton.show()
-    #     self.initialized-=1
-    #
-    # def Click_delButton5(self):
-    #     self.LE5.setText("")
-    #     self.vbox1.removeItem(self.hbox5)
-    #     self.LE5.hide()
-    #     self.lbl5.hide()
-    #     self.delButton5.hide()
-    #     self.addButton.show()
-    #     self.initialized -= 1
-    #
-    # def Click_delButton6(self):
-    #     self.LE6.setText("")
-    #     self.hbox6.hide()
-    #     self.addButton.show()
-    #     self.initialized -= 1
-    #
-    # def Click_delButton7(self):
-    #     self.LE7.setText("")
-    #     self.hbox7.hide()
-    #     self.addButton.show()
-    #     self.initialized -= 1
-    #
-    # def Click_delButton8(self):
-    #     self.LE8.setText("")
-    #     self.hbox8.hide()
-    #     self.addButton.show()
-    #     self.initialized -= 1
-    #
-    # def Click_delButton9(self):
-    #     self.LE9.setText("")
-    #     self.hbox9.hide()
-    #     self.addButton.show()
-    #     self.initialized -= 1
-    #
-    # def Click_delButton10(self):
-    #     self.LE10.setText("")
-    #     self.hbox10.hide()
-    #     self.addButton.show()
-    #     self.initialized -= 1
+        if self.initialized == 10:
+            self.saveButton.hide()
+            self.cancelButton.hide()
+            self.vbox2.removeItem(self.hbox12)
+            self.vbox2.addLayout(self.hbox11)
+            self.addButton.show()
+            self.vbox2.addLayout(self.hbox12)
+            self.saveButton.show()
+            self.cancelButton.show()
+
+        self.initialized -= 1
+
+        print(self.initialized)
 
     def Click_saveButton(self):
         for i in range(10):

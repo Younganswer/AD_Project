@@ -2,8 +2,8 @@ import random
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QGraphicsPixmapItem
 
-path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Help_Choose/'
-
+#path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Help_Choose/'
+path = '/home/user/PycharmProjects/AD_Project/Help_Choose/'
 
 
 # 게임 배경 설정 클래스

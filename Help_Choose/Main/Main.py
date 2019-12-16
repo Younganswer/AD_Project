@@ -1,5 +1,6 @@
 import sys
 import random
+import time
 from PyQt5.QtMultimedia import QSound
 from PyQt5.QtCore import (
     Qt,
@@ -74,6 +75,8 @@ class Scene(QGraphicsScene):
         self.foodImagePath = ""
         self.isAllFood = False
         self.isInitialized = False
+        self.initUI = False
+        self.customizeDic = {}
 
         # Enemies
         # self.enemies = [Enemy()]
@@ -81,6 +84,7 @@ class Scene(QGraphicsScene):
         # self.addItem(self.enemies[0])
         # self.idx = [0]
 
+        self.customize = CustomizeScreen(self)
 
         self.view = QGraphicsView(self)
         self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -259,7 +263,7 @@ class Scene(QGraphicsScene):
                     food = FoodChoose(value['image'], key, self)
                     self.foodList.append(food)
                     food = None
-                
+
                 length = 0
                 for food in self.foodList:
                     x, y = FoodChoose.foodLocation[length][0], FoodChoose.foodLocation[length][1]
@@ -439,6 +443,7 @@ class Scene(QGraphicsScene):
                     food = FoodChoose(value['image'], key, self)
                     self.foodList.append(food)
                     food = None
+
                 
                 length = 0
                 for food in self.foodList:
@@ -581,8 +586,75 @@ class Scene(QGraphicsScene):
                 
 
         elif self.screen == "CustomizeScreen":
-            pass
-            
+            if not self.isInitialized:
+                if not self.initUI:
+                    self.customize.cancel = False
+                    self.customize.initUI()
+                    self.initUI = True
+
+                else:
+                    if len(self.customizeDic) != 0:
+                        self.bg = BackGround("DarkBlue")
+                        self.addItem(self.bg)
+
+                        # Player
+                        self.player = Player()
+                        self.player.setPos((SCREEN_WIDTH - self.player.pixmap().width()) / 2, 500)
+                        self.addItem(self.player)
+
+                        # Bullets
+                        self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0], PLAYER_BULLET_Y),
+                                        Bullet(PLAYER_BULLET_X_OFFSETS[1], PLAYER_BULLET_Y - 30),
+                                        Bullet(PLAYER_BULLET_X_OFFSETS[2], PLAYER_BULLET_Y)]
+                        for b in self.bullets:
+                            b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                            self.addItem(b)
+
+                        self.foodList = []
+                        for key, value in self.customizeDic.items():
+                            food = FoodChoose(value['image'], key, self)
+                            self.foodList.append(food)
+                            food = None
+
+                        length = 0
+                        for food in self.foodList:
+                            x, y = FoodChoose.foodLocation[length][0], FoodChoose.foodLocation[length][1]
+                            food.setPos(x, y)
+                            food.pos = length
+                            self.addItem(food)
+                            length += len(FoodChoose.foodLocation) // len(self.foodList)
+
+
+                        # BackButton
+                        self.backButton = BackButton(self)
+                        self.backButton.setPos(10, 20)
+                        self.addItem(self.backButton)
+
+                        self.isInitialized = True
+
+
+                    else:
+                        if self.customize.cancel:
+                            self.screen = 'InitialScreen'
+                            self.isInitialized = False
+                            self.clear()
+
+
+            else:
+                self.player.game_update(self.keys_pressed)
+                for b in self.bullets:
+                    b.game_update(self.keys_pressed, self.player)
+
+                if self.backButton.game_update(self.bullets):
+                    return
+
+                for i in range(len(self.foodList)):
+                    if self.foodList[i].game_update(self.bullets):
+                        break
+
+
+
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
