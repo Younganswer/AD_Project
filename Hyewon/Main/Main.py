@@ -593,15 +593,12 @@ class Scene(QGraphicsScene):
                     font.setPixelSize(60)
                     font.setBold(True)
                     self.addText("Selecting...", font).setPos(250, 250)
-                    print("ww")
                     self.customize.cancel = False
                     self.customize.initUI()
                     self.initUI = True
                 else:
                     if len(self.customizeDic) != 0:
-                        print("e")
                         self.clear()
-                        print("EE")
                         self.bg = BackGround("DarkBlue")
                         self.addItem(self.bg)
 
