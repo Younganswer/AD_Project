@@ -76,7 +76,6 @@ class Scene(QGraphicsScene):
             self.previousScreen[categoryKey] = "FoodScreen"
             for foodKey in value.keys():
                 self.previousScreen[foodKey] = categoryKey
-        print(self.previousScreen)
         self.foodImagePath = ""
         self.isAllFood = False
         self.isInitialized = False
@@ -297,7 +296,6 @@ class Scene(QGraphicsScene):
 
                 for i in range(len(self.foodList)):
                     if self.foodList[i].game_update(self.bullets):
-                        print(self.screen)
                         break
 
 
