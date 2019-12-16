@@ -648,6 +648,10 @@ class Scene(QGraphicsScene):
                 if self.backButton.game_update(self.bullets):
                     return
 
+                for i in range(len(self.selectList)):
+                    if self.selectList[i].game_update(self.bullets):
+                        print(self.selectList[i].select, self.selectList[i].imagePath)
+
 
 
 
