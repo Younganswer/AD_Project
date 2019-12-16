@@ -8,7 +8,9 @@ from PyQt5.QtCore import (
 )
 from PyQt5.QtGui import (
     QBrush,
-    QPixmap
+    QPixmap,
+    QFont,
+    QPalette
 )
 from PyQt5.QtWidgets import (
     QApplication,
@@ -23,30 +25,32 @@ from PyQt5.QtWidgets import (
     QGraphicsView
 )
 
-from AskClose import AskClose
-from BackGround import BackGround
-from Bullet import Bullet
-from Player import Player
-from Select import Select
-from FoodCategory import FoodCategory
-from FoodChoose import FoodChoose
-from BackButton import BackButton
+from AskClose        import AskClose
+from BackGround      import BackGround
+from Bullet          import Bullet
+from Player          import Player
+from Select          import Select
+from FoodCategory    import FoodCategory
+from FoodChoose      import FoodChoose
+from BackButton      import BackButton
 from CustomizeScreen import CustomizeScreen, Customize
-from FoodInfo import FoodInfo, Retry, Home, OpenURL
+from FoodInfo        import FoodInfo, Retry, Home, OpenURL
 import WholeFood
+from CustomizeResult import CustomizeResult, CustomizeRetry
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-PLAYER_SPEED = 3  # pix/frame
+SCREEN_WIDTH            = 800
+SCREEN_HEIGHT           = 600
+PLAYER_SPEED            = 3   # pix/frame
 PLAYER_BULLET_X_OFFSETS = [0, 45, 90]
-PLAYER_BULLET_Y = 15
-BULLET_SPEED = 10  # pix/frame
-BULLET_FRAMES = 50
-FRAME_TIME_MS = 16  # ms/frame
+PLAYER_BULLET_Y         = 15
+BULLET_SPEED            = 10  # pix/frame
+BULLET_FRAMES           = 50
+FRAME_TIME_MS           = 16  # ms/frame
 # frame * ms/frame = ms  =>  frame(y) = whole_ms(x) / frame_ms(16)
-ENEMY_SPONE_X = 800
-ENEMY_SPONE_Y = 600
-ENEMY_FRAMES = 500
+ENEMY_SPONE_X           = 800
+ENEMY_SPONE_Y           = 600
+ENEMY_FRAMES            = 500
+
 
 
 # 메인 클래스
@@ -66,18 +70,18 @@ class Scene(QGraphicsScene):
         # bg.setBrush(QBrush(Qt.black))
 
         self.screen = "InitialScreen"
-        self.previousScreen = {"FoodScreen": "InitialScreen", "CustomizeScreen": "InitialScreen",
-                               "AllFood": "FoodScreen"}
+        self.previousScreen = {"FoodScreen": "InitialScreen", "CustomizeScreen": "InitialScreen", "AllFood": "FoodScreen"}
         for categoryKey, value in WholeFood.wholeFoodDic.items():
             self.previousScreen[categoryKey] = "FoodScreen"
             for foodKey in value.keys():
                 self.previousScreen[foodKey] = categoryKey
+        print(self.previousScreen)
         self.foodImagePath = ""
         self.isAllFood = False
         self.isInitialized = False
         self.initUI = False
         self.customizeDic = {}
-
+        self.url = ""
         # Enemies
         # self.enemies = [Enemy()]
         # self.enemies[0].setPos(SCREEN_WIDTH, 0)
@@ -89,23 +93,30 @@ class Scene(QGraphicsScene):
         self.view = QGraphicsView(self)
         self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.view.setWindowTitle("Help_Choose")
+        self.view.setWindowIcon(QIcon("C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Youngseo/PNG/UI/AirPods.png"))
+        # self.view.setWindowFlags(Qt.CustomizeWindowHint)
         self.view.show()
-        self.view.setFixedSize(SCREEN_WIDTH, SCREEN_HEIGHT)
-        self.setSceneRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.view.setFixedSize(SCREEN_WIDTH,SCREEN_HEIGHT)
+        self.setSceneRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT)
 
         self.ask = AskClose(self)
+
 
     def keyPressEvent(self, event):
         self.keys_pressed.add(event.key())
         if event.key() == Qt.Key_Escape:
             self.ask.show()
+            
 
     def keyReleaseEvent(self, event):
         self.keys_pressed.remove(event.key())
 
+
     def timerEvent(self, event):
         self.game_update()
         self.update()
+
 
     def game_update(self):
         if self.screen == "InitialScreen":
@@ -114,19 +125,21 @@ class Scene(QGraphicsScene):
                 self.bg = BackGround("Black")
                 self.addItem(self.bg)
 
+
                 # Player
                 self.player = Player()
-                self.player.setPos((SCREEN_WIDTH - self.player.pixmap().width()) / 2, 500)
+                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2, 500)
                 self.addItem(self.player)
 
+
                 # Bullets
-                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0], PLAYER_BULLET_Y),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[1], PLAYER_BULLET_Y - 30),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[2], PLAYER_BULLET_Y)]
+                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
                 for b in self.bullets:
                     b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                     self.addItem(b)
-
+                
                 # Select
                 self.foodSelect = Select("PNG/Initial_Screen/fork.png", "FoodScreen", self)
                 self.foodSelect.setPos(100, 100)
@@ -137,7 +150,7 @@ class Scene(QGraphicsScene):
                 self.addItem(self.customizeSelect)
 
                 self.isInitialized = True
-
+            
             else:
                 self.player.game_update(self.keys_pressed)
                 for b in self.bullets:
@@ -148,7 +161,7 @@ class Scene(QGraphicsScene):
 
                 elif self.customizeSelect.game_update(self.bullets):
                     return
-
+        
         elif self.screen == "FoodScreen":
             if not self.isInitialized:
                 # BackGround
@@ -156,40 +169,42 @@ class Scene(QGraphicsScene):
                 self.bg.setPos(0, 0)
                 self.addItem(self.bg)
 
+
                 # Player
                 self.player = Player()
-                self.player.setPos((SCREEN_WIDTH - self.player.pixmap().width()) / 2, 500)
+                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2, 500)
                 self.addItem(self.player)
 
+
                 # Bullets
-                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0], PLAYER_BULLET_Y),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[1], PLAYER_BULLET_Y - 30),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[2], PLAYER_BULLET_Y)]
+                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
                 for b in self.bullets:
                     b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                     self.addItem(b)
-
+                
                 # FoodCategory
                 interval = 33.333333333
                 imageWidth = 100
                 self.koreanFood = FoodCategory("PNG/Category/KoreanFood.png", "KoreanFood", self)
-                self.koreanFood.setPos(100 + interval, interval)
+                self.koreanFood.setPos(100+interval, interval)
                 self.addItem(self.koreanFood)
 
                 self.chineseFood = FoodCategory("PNG/Category/ChineseFood.png", "ChineseFood", self)
-                self.chineseFood.setPos(100 + interval * 2 + imageWidth, interval)
+                self.chineseFood.setPos(100+interval*2 + imageWidth, interval)
                 self.addItem(self.chineseFood)
 
                 self.japaneseFood = FoodCategory("PNG/Category/JapaneseFood.png", "JapaneseFood", self)
-                self.japaneseFood.setPos(100 + interval * 3 + imageWidth * 2, interval)
+                self.japaneseFood.setPos(100+interval*3 + imageWidth*2, interval)
                 self.addItem(self.japaneseFood)
 
                 self.westernFood = FoodCategory("PNG/Category/WesternFood.png", "WesternFood", self)
-                self.westernFood.setPos(100 + interval * 4 + imageWidth * 3, interval)
+                self.westernFood.setPos(100+interval*4 + imageWidth*3, interval)
                 self.addItem(self.westernFood)
 
                 self.allFood = FoodCategory("PNG/Category/customize.png", "AllFood", self)
-                self.allFood.setPos(100 + interval * 5 + imageWidth * 4, interval)
+                self.allFood.setPos(100+interval*5 + imageWidth*4, interval)
                 self.addItem(self.allFood)
 
                 interval = None
@@ -218,39 +233,41 @@ class Scene(QGraphicsScene):
 
                 elif self.westernFood.game_update(self.bullets):
                     return
-
+                
                 elif self.allFood.game_update(self.bullets):
                     return
 
                 elif self.backButton.game_update(self.bullets):
                     return
-
+        
         elif self.screen == "KoreanFood":
             if not self.isInitialized:
                 # BackGround
                 self.bg = BackGround("DarkBlue")
                 self.addItem(self.bg)
 
+
                 # Player
                 self.player = Player()
-                self.player.setPos((SCREEN_WIDTH - self.player.pixmap().width()) / 2, 500)
+                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2, 500)
                 self.addItem(self.player)
 
+
                 # Bullets
-                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0], PLAYER_BULLET_Y),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[1], PLAYER_BULLET_Y - 30),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[2], PLAYER_BULLET_Y)]
+                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
                 for b in self.bullets:
                     b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                     self.addItem(b)
-
+                
                 self.foodList = []
                 # wholeFoodDic = {'koreanFoodDic': koreanFoodDic}
                 # koreanFoodDic = {'bibimbab': bibimbab}
                 # bibimbab = {'image': , :, :}
                 # each == bibimbab
                 for key, value in WholeFood.wholeFoodDic[self.screen].items():
-                    food = FoodChoose(value['image'], key, self)
+                    food = FoodChoose(value['image'], key, value['URL'], self)
                     self.foodList.append(food)
                     food = None
 
@@ -289,29 +306,31 @@ class Scene(QGraphicsScene):
                 self.bg = BackGround("DarkBlue")
                 self.addItem(self.bg)
 
+
                 # Player
                 self.player = Player()
-                self.player.setPos((SCREEN_WIDTH - self.player.pixmap().width()) / 2, 500)
+                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2, 500)
                 self.addItem(self.player)
 
+
                 # Bullets
-                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0], PLAYER_BULLET_Y),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[1], PLAYER_BULLET_Y - 30),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[2], PLAYER_BULLET_Y)]
+                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
                 for b in self.bullets:
                     b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                     self.addItem(b)
-
+                
                 self.foodList = []
                 # wholeFoodDic = {'koreanFoodDic': koreanFoodDic}
                 # koreanFoodDic = {'bibimbab': bibimbab}
                 # bibimbab = {'image': , :, :}
                 # each == bibimbab
                 for key, value in WholeFood.wholeFoodDic[self.screen].items():
-                    food = FoodChoose(value['image'], key, self)
+                    food = FoodChoose(value['image'], key, value['URL'], self)
                     self.foodList.append(food)
                     food = None
-
+                
                 length = 0
                 for food in self.foodList:
                     x, y = FoodChoose.foodLocation[length][0], FoodChoose.foodLocation[length][1]
@@ -338,8 +357,8 @@ class Scene(QGraphicsScene):
                 for i in range(len(self.foodList)):
                     if self.foodList[i].game_update(self.bullets):
                         break
-
-
+                
+                
 
         elif self.screen == "JapaneseFood":
             if not self.isInitialized:
@@ -347,29 +366,31 @@ class Scene(QGraphicsScene):
                 self.bg = BackGround("DarkBlue")
                 self.addItem(self.bg)
 
+
                 # Player
                 self.player = Player()
-                self.player.setPos((SCREEN_WIDTH - self.player.pixmap().width()) / 2, 500)
+                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2, 500)
                 self.addItem(self.player)
 
+
                 # Bullets
-                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0], PLAYER_BULLET_Y),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[1], PLAYER_BULLET_Y - 30),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[2], PLAYER_BULLET_Y)]
+                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
                 for b in self.bullets:
                     b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                     self.addItem(b)
-
+                
                 self.foodList = []
                 # wholeFoodDic = {'koreanFoodDic': koreanFoodDic}
                 # koreanFoodDic = {'bibimbab': bibimbab}
                 # bibimbab = {'image': , :, :}
                 # each == bibimbab
                 for key, value in WholeFood.wholeFoodDic[self.screen].items():
-                    food = FoodChoose(value['image'], key, self)
+                    food = FoodChoose(value['image'], key, value['URL'], self)
                     self.foodList.append(food)
                     food = None
-
+                
                 length = 0
                 for food in self.foodList:
                     x, y = FoodChoose.foodLocation[length][0], FoodChoose.foodLocation[length][1]
@@ -396,8 +417,8 @@ class Scene(QGraphicsScene):
                 for i in range(len(self.foodList)):
                     if self.foodList[i].game_update(self.bullets):
                         break
-
-
+                
+                
 
         elif self.screen == "WesternFood":
             if not self.isInitialized:
@@ -405,29 +426,32 @@ class Scene(QGraphicsScene):
                 self.bg = BackGround("DarkBlue")
                 self.addItem(self.bg)
 
+
                 # Player
                 self.player = Player()
-                self.player.setPos((SCREEN_WIDTH - self.player.pixmap().width()) / 2, 500)
+                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2, 500)
                 self.addItem(self.player)
 
+
                 # Bullets
-                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0], PLAYER_BULLET_Y),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[1], PLAYER_BULLET_Y - 30),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[2], PLAYER_BULLET_Y)]
+                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
                 for b in self.bullets:
                     b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                     self.addItem(b)
-
+                
                 self.foodList = []
                 # wholeFoodDic = {'koreanFoodDic': koreanFoodDic}
                 # koreanFoodDic = {'bibimbab': bibimbab}
                 # bibimbab = {'image': , :, :}
                 # each == bibimbab
                 for key, value in WholeFood.wholeFoodDic[self.screen].items():
-                    food = FoodChoose(value['image'], key, self)
+                    food = FoodChoose(value['image'], key, value['URL'], self)
                     self.foodList.append(food)
                     food = None
 
+                
                 length = 0
                 for food in self.foodList:
                     x, y = FoodChoose.foodLocation[length][0], FoodChoose.foodLocation[length][1]
@@ -461,30 +485,32 @@ class Scene(QGraphicsScene):
                 self.bg = BackGround("DarkBlue")
                 self.addItem(self.bg)
 
+
                 # Player
                 self.player = Player()
-                self.player.setPos((SCREEN_WIDTH - self.player.pixmap().width()) / 2, 500)
+                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2, 500)
                 self.addItem(self.player)
 
+
                 # Bullets
-                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0], PLAYER_BULLET_Y),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[1], PLAYER_BULLET_Y - 30),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[2], PLAYER_BULLET_Y)]
+                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
                 for b in self.bullets:
                     b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                     self.addItem(b)
-
+                
                 self.foodList = []
                 # wholeFoodDic = {'koreanFoodDic': koreanFoodDic}
                 # koreanFoodDic = {'bibimbab': bibimbab}
                 # bibimbab = {'image': , :, :}
                 # each == bibimbab
-                for each in WholeFood.wholeFoodDic.values():
+                for each in WholeFood.wholeFoodDic.values():    
                     for key, value in each.items():
-                        food = FoodChoose(value['image'], key, self)
+                        food = FoodChoose(value['image'], key, value['URL'], self)
                         self.foodList.append(food)
                         food = None
-
+                
                 length = 0
                 for food in self.foodList:
                     x, y = FoodChoose.foodLocation[length][0], FoodChoose.foodLocation[length][1]
@@ -497,7 +523,7 @@ class Scene(QGraphicsScene):
                 self.backButton = BackButton(self)
                 self.backButton.setPos(10, 20)
                 self.addItem(self.backButton)
-                self.isAllFood = True
+                self.isAllFood     = True
                 self.isInitialized = True
 
             else:
@@ -518,33 +544,43 @@ class Scene(QGraphicsScene):
                 self.bg = BackGround("Purple")
                 self.addItem(self.bg)
 
+
                 # Player
                 self.player = Player()
-                self.player.setPos((SCREEN_WIDTH - self.player.pixmap().width()) / 2, 500)
+                self.player.setPos((SCREEN_WIDTH-self.player.pixmap().width())/2, 500)
                 self.addItem(self.player)
 
+
                 # Bullets
-                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0], PLAYER_BULLET_Y),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[1], PLAYER_BULLET_Y - 30),
-                                Bullet(PLAYER_BULLET_X_OFFSETS[2], PLAYER_BULLET_Y)]
+                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0],PLAYER_BULLET_Y),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[1],PLAYER_BULLET_Y - 30),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[2],PLAYER_BULLET_Y)]
                 for b in self.bullets:
                     b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                     self.addItem(b)
-
+                
+                font = QFont()
+                font.setPixelSize(25)
+                font.setBold(True)
+                for value in WholeFood.wholeFoodDic.values():
+                    if self.screen in value:
+                        self.addText(value[self.screen]['foodInfo'], font).setPos(300, 105)
+                        break
+                
                 self.foodImage = FoodInfo(self.foodImagePath, self)
                 self.foodImage.setPos(100, 100)
                 self.addItem(self.foodImage)
 
                 self.homeButton = Home(self)
-                self.homeButton.setPos(200 - self.homeButton.pixmap().width() // 2, 300)
+                self.homeButton.setPos(200-self.homeButton.pixmap().width()//2, 300)
                 self.addItem(self.homeButton)
 
                 self.retryButton = Retry(self)
-                self.retryButton.setPos(400 - self.retryButton.pixmap().width() // 2, 300)
+                self.retryButton.setPos(400-self.retryButton.pixmap().width()//2, 300)
                 self.addItem(self.retryButton)
-
+                
                 self.openUrlButton = OpenURL(self)
-                self.openUrlButton.setPos(600 - self.openUrlButton.pixmap().width() // 2, 300)
+                self.openUrlButton.setPos(600-self.openUrlButton.pixmap().width()//2, 300)
                 self.addItem(self.openUrlButton)
 
                 self.isInitialized = True
@@ -557,22 +593,29 @@ class Scene(QGraphicsScene):
                 if self.homeButton.game_update(self.bullets):
                     return
 
-                elif self.retryButton.game_update(self.bullets, self.isAllFood):
+                elif self.retryButton.game_update(self.bullets):
                     return
 
                 elif self.openUrlButton.game_update(self.bullets):
                     return
-
+                
 
         elif self.screen == "CustomizeScreen":
             if not self.isInitialized:
                 if not self.initUI:
+                    bg = BackGround("DarkBlue")
+                    self.addItem(bg)
+
+                    font = QFont()
+                    font.setPixelSize(60)
+                    font.setBold(True)
+                    self.addText("Selecting...", font).setPos(250, 250)
                     self.customize.cancel = False
                     self.customize.initUI()
                     self.initUI = True
-
                 else:
                     if len(self.customizeDic) != 0:
+                        self.clear()
                         self.bg = BackGround("DarkBlue")
                         self.addItem(self.bg)
 
@@ -603,6 +646,7 @@ class Scene(QGraphicsScene):
                             self.addItem(select)
                             length += len(Customize.selectLocation) // len(self.selectList)
 
+
                         # BackButton
                         self.backButton = BackButton(self)
                         self.backButton.setPos(10, 20)
@@ -628,7 +672,63 @@ class Scene(QGraphicsScene):
 
                 for i in range(len(self.selectList)):
                     if self.selectList[i].game_update(self.bullets):
-                        print(self.selectList[i].select, self.selectList[i].imagePath)
+                        return
+
+        elif self.screen in self.customize.starImgList:
+            if not self.isInitialized:
+                # BackGround
+                self.bg = BackGround("Purple")
+                self.addItem(self.bg)
+
+                # Player
+                self.player = Player()
+                self.player.setPos((SCREEN_WIDTH - self.player.pixmap().width()) / 2, 500)
+                self.addItem(self.player)
+
+                # Bulletsdc
+                self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0], PLAYER_BULLET_Y),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[1], PLAYER_BULLET_Y - 30),
+                                Bullet(PLAYER_BULLET_X_OFFSETS[2], PLAYER_BULLET_Y)]
+                for b in self.bullets:
+                    b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                    self.addItem(b)
+
+                self.selectImage = CustomizeResult(self.screen, self)
+                self.selectImage.setPos(100, 100)
+                self.addItem(self.selectImage)
+
+                font = QFont()
+                # palette = QPalette()
+                font.setPixelSize(60)
+                font.setBold(True)
+                # palette.setColor(QPalette.Text, Qt.white)
+                # font.setPalette(palette)
+                self.addText(self.selectText, font).setPos(350,100)
+                #self.font.setStyleSheet("color:rgb(255,255,255")
+
+
+                self.homeButton = Home(self)
+                self.homeButton.setPos(300 - self.homeButton.pixmap().width() // 2, 300)
+                self.addItem(self.homeButton)
+
+                self.retryButton = CustomizeRetry(self)
+                self.retryButton.setPos(500 - self.retryButton.pixmap().width() // 2, 300)
+                self.addItem(self.retryButton)
+
+
+                self.isInitialized = True
+
+            else:
+                self.player.game_update(self.keys_pressed)
+                for b in self.bullets:
+                    b.game_update(self.keys_pressed, self.player)
+
+                if self.homeButton.game_update(self.bullets):
+                    return
+
+                elif self.retryButton.game_update(self.bullets):
+                    return
+
 
 
 if __name__ == '__main__':
