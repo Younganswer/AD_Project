@@ -8,7 +8,9 @@ from PyQt5.QtCore import (
 )
 from PyQt5.QtGui import (
     QBrush,
-    QPixmap
+    QPixmap,
+    QFont,
+    QPalette
 )
 from PyQt5.QtWidgets import (
     QApplication,
@@ -34,7 +36,7 @@ from BackButton      import BackButton
 from CustomizeScreen import CustomizeScreen, Customize
 from FoodInfo        import FoodInfo, Retry, Home, OpenURL
 import WholeFood
-from CustomizeResult import CustomizeResult
+from CustomizeResult import CustomizeResult, CustomizeRetry
 
 SCREEN_WIDTH            = 800
 SCREEN_HEIGHT           = 600
@@ -584,12 +586,22 @@ class Scene(QGraphicsScene):
         elif self.screen == "CustomizeScreen":
             if not self.isInitialized:
                 if not self.initUI:
+                    bg = BackGround("DarkBlue")
+                    self.addItem(bg)
+
+                    font = QFont()
+                    font.setPixelSize(60)
+                    font.setBold(True)
+                    self.addText("Selecting...", font).setPos(250, 250)
+                    print("ww")
                     self.customize.cancel = False
                     self.customize.initUI()
                     self.initUI = True
-
                 else:
                     if len(self.customizeDic) != 0:
+                        print("e")
+                        self.clear()
+                        print("EE")
                         self.bg = BackGround("DarkBlue")
                         self.addItem(self.bg)
 
@@ -671,13 +683,21 @@ class Scene(QGraphicsScene):
                 self.selectImage.setPos(100, 100)
                 self.addItem(self.selectImage)
 
-                self.addText(self.selectText).setPos(300,100)
+                font = QFont()
+                # palette = QPalette()
+                font.setPixelSize(60)
+                font.setBold(True)
+                # palette.setColor(QPalette.Text, Qt.white)
+                # font.setPalette(palette)
+                self.addText(self.selectText, font).setPos(350,100)
+                #self.font.setStyleSheet("color:rgb(255,255,255")
+
 
                 self.homeButton = Home(self)
                 self.homeButton.setPos(300 - self.homeButton.pixmap().width() // 2, 300)
                 self.addItem(self.homeButton)
 
-                self.retryButton = Retry(self)
+                self.retryButton = CustomizeRetry(self)
                 self.retryButton.setPos(500 - self.retryButton.pixmap().width() // 2, 300)
                 self.addItem(self.retryButton)
 
@@ -692,11 +712,8 @@ class Scene(QGraphicsScene):
                 if self.homeButton.game_update(self.bullets):
                     return
 
-                elif self.retryButton.game_update(self.bullets, self.isAllFood):
+                elif self.retryButton.game_update(self.bullets):
                     return
-
-
-
 
 
 
