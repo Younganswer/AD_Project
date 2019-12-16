@@ -562,7 +562,10 @@ class Scene(QGraphicsScene):
                 font = QFont()
                 font.setPixelSize(25)
                 font.setBold(True)
-                self.addText(WholeFood.wholeFoodDic['WesternFood']['spaghetti']['foodInfo'], font).setPos(300, 105)
+                for value in WholeFood.wholeFoodDic.values():
+                    if self.screen in value:
+                        self.addText(value[self.screen]['foodInfo'], font).setPos(300, 105)
+                        break
                 
                 self.foodImage = FoodInfo(self.foodImagePath, self)
                 self.foodImage.setPos(100, 100)
