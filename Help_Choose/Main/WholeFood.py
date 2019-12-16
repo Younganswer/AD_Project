@@ -27,10 +27,10 @@ chineseFoodDic["noodles"]  = noodles
 chineseFoodDic["tea"]      = tea
 
 # JapaneseFood
-sushi    = {"image": "PNG/Japanese_Food/sushi",    "foodInfo": "단촛물으로 감칠맛을 높인 밥\n밥위에 얹어진 기름이 그득한 회 한점\n입안을 가득 채우는 부드러움\n이번 겨울 스시를 먹어보는건 어떤가",                  "URL": "https://m.blog.naver.com/PostView.nhn?blogId=rah210&logNo=221331340647&proxyReferer=https%3A%2F%2Fwww.google.com%2F"}
-tempura  = {"image": "PNG/Japanese_Food/tempura",  "foodInfo": "일반적인 튀김옷 보다 가볍다\n그 가벼움이 입안 가득 바삭거린다\n남녀노소 즐길 수 있는 일본식 튀김\n그 바삭함의 늪에 빠져보자",                        "URL": "https://m.blog.naver.com/PostView.nhn?blogId=ceron2&logNo=221480036008&categoryNo=44&proxyReferer=&proxyReferer=https%3A%2F%2Fwww.google.com%2F"}
-takoyaki = {"image": "PNG/Japanese_Food/takoyaki", "foodInfo": "밀가루 반죽에 잘게 썬 문어와\n파, 양배추 등을 넣어 동그랗게 구워내\n가쓰오부시와 소스를 뿌려먹는 일본의 먹거리\n호호 불어가며 먹는 그 맛은 일품이다", "URL": "https://www.mangoplate.com/search/%ED%83%80%EC%BD%94%EC%95%BC%EB%81%BC"}
-yakitori = {"image": "PNG/Japanese_Food/yakitori", "foodInfo": "길거리에서 사먹는 그 맛부터\n술 안주로 먹는 그 맛까지\n닭꼬치의 다양한 그 맛을\n이번 겨울 느껴보는 것은 어떤가",                                    "URL": "https://m.post.naver.com/viewer/postView.nhn?volumeNo=7592072&memberNo=32920277"}
+sushi    = {"image": "PNG/Japanese_Food/sushi",    "foodInfo": "단촛물으로 감칠맛을 높인 밥\n밥위에 얹어진 기름이 그득한 회 한점\n입안을 가득 채우는 부드러움\n이번 겨울 스시를 먹어보는건 어떤가", "URL": "https://m.blog.naver.com/PostView.nhn?blogId=rah210&logNo=221331340647&proxyReferer=https%3A%2F%2Fwww.google.com%2F"}
+tempura  = {"image": "PNG/Japanese_Food/tempura",  "foodInfo": "일반적인 튀김옷 보다 가볍다\n그 가벼움이 입안 가득 바삭거린다\n남녀노소 즐길 수 있는 일본식 튀김\n그 바삭함의 늪에 빠져보자",       "URL": "https://m.blog.naver.com/PostView.nhn?blogId=ceron2&logNo=221480036008&categoryNo=44&proxyReferer=&proxyReferer=https%3A%2F%2Fwww.google.com%2F"}
+takoyaki = {"image": "PNG/Japanese_Food/takoyaki", "foodInfo": "밀가루 반죽에 잘게 썬 문어와\n파, 양배추 등을 넣어 동그랗게 구워내\n가쓰오부시와 소스를 뿌려먹는\n일본의 대표 먹거리 그 맛은 일품", "URL": "https://www.mangoplate.com/search/%ED%83%80%EC%BD%94%EC%95%BC%EB%81%BC"}
+yakitori = {"image": "PNG/Japanese_Food/yakitori", "foodInfo": "길거리에서 사먹는 그 맛부터\n술 안주로 먹는 그 맛까지\n닭꼬치의 다양한 그 맛을\n이번 겨울 느껴보는 것은 어떤가",                   "URL": "https://m.post.naver.com/viewer/postView.nhn?volumeNo=7592072&memberNo=32920277"}
 
 japaneseFoodDic["sushi"]    = sushi
 japaneseFoodDic["tempura"]  = tempura

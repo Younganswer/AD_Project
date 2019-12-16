@@ -203,7 +203,7 @@ class Scene(QGraphicsScene):
                 self.westernFood.setPos(100+interval*4 + imageWidth*3, interval)
                 self.addItem(self.westernFood)
 
-                self.allFood = FoodCategory("PNG/Category/customize.png", "AllFood", self)
+                self.allFood = FoodCategory("PNG/Category/AllFood.png", "AllFood", self)
                 self.allFood.setPos(100+interval*5 + imageWidth*4, interval)
                 self.addItem(self.allFood)
 
@@ -721,7 +721,7 @@ class Scene(QGraphicsScene):
                 self.player.game_update(self.keys_pressed)
                 for b in self.bullets:
                     b.game_update(self.keys_pressed, self.player)
-
+ 
                 if self.homeButton.game_update(self.bullets):
                     return
 
