@@ -77,7 +77,7 @@ class Scene(QGraphicsScene):
         self.isInitialized = False
         self.initUI = False
         self.customizeDic = {}
-
+        self.url = ""
         # Enemies
         # self.enemies = [Enemy()]
         # self.enemies[0].setPos(SCREEN_WIDTH, 0)
@@ -260,7 +260,7 @@ class Scene(QGraphicsScene):
                 # bibimbab = {'image': , :, :}
                 # each == bibimbab
                 for key, value in WholeFood.wholeFoodDic[self.screen].items():
-                    food = FoodChoose(value['image'], key, self)
+                    food = FoodChoose(value['image'], key, value['URL'], self)
                     self.foodList.append(food)
                     food = None
 
@@ -320,7 +320,7 @@ class Scene(QGraphicsScene):
                 # bibimbab = {'image': , :, :}
                 # each == bibimbab
                 for key, value in WholeFood.wholeFoodDic[self.screen].items():
-                    food = FoodChoose(value['image'], key, self)
+                    food = FoodChoose(value['image'], key, value['URL'], self)
                     self.foodList.append(food)
                     food = None
                 
@@ -380,7 +380,7 @@ class Scene(QGraphicsScene):
                 # bibimbab = {'image': , :, :}
                 # each == bibimbab
                 for key, value in WholeFood.wholeFoodDic[self.screen].items():
-                    food = FoodChoose(value['image'], key, self)
+                    food = FoodChoose(value['image'], key, value['URL'], self)
                     self.foodList.append(food)
                     food = None
                 
@@ -440,7 +440,7 @@ class Scene(QGraphicsScene):
                 # bibimbab = {'image': , :, :}
                 # each == bibimbab
                 for key, value in WholeFood.wholeFoodDic[self.screen].items():
-                    food = FoodChoose(value['image'], key, self)
+                    food = FoodChoose(value['image'], key, value['URL'], self)
                     self.foodList.append(food)
                     food = None
 
@@ -500,7 +500,7 @@ class Scene(QGraphicsScene):
                 # each == bibimbab
                 for each in WholeFood.wholeFoodDic.values():    
                     for key, value in each.items():
-                        food = FoodChoose(value['image'], key, self)
+                        food = FoodChoose(value['image'], key, value['URL'], self)
                         self.foodList.append(food)
                         food = None
                 
@@ -581,7 +581,7 @@ class Scene(QGraphicsScene):
                 elif self.retryButton.game_update(self.bullets, self.isAllFood):
                     return
 
-                elif self.openUrlButton.game_update(self.bullets):
+                elif self.openUrlButton.game_update(self.bullets, ):
                     return
                 
 
@@ -651,6 +651,7 @@ class Scene(QGraphicsScene):
                 for i in range(len(self.selectList)):
                     if self.selectList[i].game_update(self.bullets):
                         print(self.selectList[i].select, self.selectList[i].imagePath)
+                        break
 
 
 
