@@ -22,6 +22,8 @@ from PyQt5.QtWidgets import (
     QGraphicsView
 )
 
+import webbrowser
+
 from AskClose     import AskClose
 from BackGround   import BackGround
 from Bullet       import Bullet
@@ -106,5 +108,12 @@ class OpenURL(QGraphicsPixmapItem):
                 bullets[0].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+
                 # Open URL Code.
+                print(self.main.url)
+                webbrowser.open(self.main.url)
+                self.main.url = ''
+                self.main.screen = "InitialScreen"
+                self.main.isInitialized = False
+                self.main.clear()
                 return True
