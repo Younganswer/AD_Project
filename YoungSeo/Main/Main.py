@@ -9,7 +9,8 @@ from PyQt5.QtCore import (
 from PyQt5.QtGui import (
     QBrush,
     QPixmap,
-    QIcon
+    QIcon,
+    QFont
 )
 from PyQt5.QtWidgets import (
     QApplication,
@@ -21,7 +22,8 @@ from PyQt5.QtWidgets import (
     QGraphicsPixmapItem,
     QGraphicsRectItem,
     QGraphicsScene,
-    QGraphicsView
+    QGraphicsView,
+    QGraphicsTextItem
 )
 
 from AskClose        import AskClose
@@ -73,6 +75,7 @@ class Scene(QGraphicsScene):
             self.previousScreen[categoryKey] = "FoodScreen"
             for foodKey in value.keys():
                 self.previousScreen[foodKey] = categoryKey
+        print(self.previousScreen)
         self.foodImagePath = ""
         self.isAllFood = False
         self.isInitialized = False
@@ -92,7 +95,7 @@ class Scene(QGraphicsScene):
         self.view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.view.setWindowTitle("Help_Choose")
         self.view.setWindowIcon(QIcon("C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Youngseo/PNG/UI/AirPods.png"))
-        # self.view.setWindowFlags()
+        # self.view.setWindowFlags(Qt.CustomizeWindowHint)
         self.view.show()
         self.view.setFixedSize(SCREEN_WIDTH,SCREEN_HEIGHT)
         self.setSceneRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT)
@@ -556,6 +559,14 @@ class Scene(QGraphicsScene):
                     b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                     self.addItem(b)
                 
+                font = QFont()
+                font.setPixelSize(25)
+                font.setBold(True)
+                for value in WholeFood.wholeFoodDic.values():
+                    if self.screen in value:
+                        self.addText(value[self.screen]['foodInfo'], font).setPos(300, 105)
+                        break
+                
                 self.foodImage = FoodInfo(self.foodImagePath, self)
                 self.foodImage.setPos(100, 100)
                 self.addItem(self.foodImage)
@@ -578,16 +589,14 @@ class Scene(QGraphicsScene):
                 self.player.game_update(self.keys_pressed)
                 for b in self.bullets:
                     b.game_update(self.keys_pressed, self.player)
-                self.addText("Hello World").setPos(300, 100)
-                # self.setPos(a)
 
                 if self.homeButton.game_update(self.bullets):
                     return
 
-                elif self.retryButton.game_update(self.bullets, self.isAllFood):
+                elif self.retryButton.game_update(self.bullets):
                     return
 
-                elif self.openUrlButton.game_update(self.bullets, ):
+                elif self.openUrlButton.game_update(self.bullets):
                     return
                 
 
@@ -635,7 +644,6 @@ class Scene(QGraphicsScene):
                         self.backButton = BackButton(self)
                         self.backButton.setPos(10, 20)
                         self.addItem(self.backButton)
-
                         self.isInitialized = True
 
 
@@ -643,6 +651,7 @@ class Scene(QGraphicsScene):
                         if self.customize.cancel:
                             self.screen = 'InitialScreen'
                             self.isInitialized = False
+                            self.initUI = False
                             self.clear()
 
 
