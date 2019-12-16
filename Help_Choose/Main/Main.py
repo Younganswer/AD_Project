@@ -10,7 +10,8 @@ from PyQt5.QtGui import (
     QBrush,
     QPixmap,
     QFont,
-    QPalette
+    QPalette,
+    QIcon
 )
 from PyQt5.QtWidgets import (
     QApplication,
@@ -703,7 +704,7 @@ class Scene(QGraphicsScene):
                 font.setBold(True)
                 # palette.setColor(QPalette.Text, Qt.white)
                 # font.setPalette(palette)
-                self.addText(self.selectText, font).setPos(350,100)
+                self.addText(self.selectText, font).setPos(350,130)
                 #self.font.setStyleSheet("color:rgb(255,255,255")
 
 

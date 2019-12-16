@@ -40,6 +40,7 @@ SCREEN_WIDTH  = 800
 SCREEN_HEIGHT = 600
 
 path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Youngseo/'
+#path = '/home/user/PycharmProjects/AD_Project/Hyewon/'
 
 class CustomizeScreen(QWidget):
     def __init__(self, main):
@@ -177,7 +178,7 @@ class CustomizeScreen(QWidget):
                         8: {'del': self.delButton9, 'le': self.LE9, 'lbl': self.lbl9, 'hbox': self.hbox9},
                         9: {'del': self.delButton10, 'le': self.LE10, 'lbl': self.lbl10, 'hbox': self.hbox10}}
 
-        self.starimglist = ['PNG/Number/one.png',   'PNG/Number/two.png',   'PNG/Number/three.png',
+        self.starImgList = ['PNG/Number/one.png',   'PNG/Number/two.png',   'PNG/Number/three.png',
                             'PNG/Number/four.png',  'PNG/Number/five.png',  'PNG/Number/six.png',
                             'PNG/Number/seven.png', 'PNG/Number/eight.png', 'PNG/Number/nine.png', 'PNG/Number/ten.png']
 
@@ -254,7 +255,7 @@ class CustomizeScreen(QWidget):
         else:
             for i in range(len(self.initializedList)):
                 if (len(self.infoDic[i]['le'].text()) != 0):
-                    self.customizeDic[i] = {'image': self.starimglist[i], 'text': self.infoDic[i]['le'].text()}
+                    self.customizeDic[i] = {'image': self.starImgList[i], 'text': self.infoDic[i]['le'].text()}
             print(self.customizeDic)
             self.close()
             self.main.customizeDic = self.customizeDic
@@ -279,6 +280,7 @@ class Customize(QGraphicsPixmapItem):
         self.main = main
         self.select = text
 
+
     def game_update(self, bullets):
         self.pos += 1
         if (self.pos > len(self.selectLocation)-1):
@@ -290,10 +292,12 @@ class Customize(QGraphicsPixmapItem):
                 bullets[0].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
-                self.main.screen        = self.select
+                self.main.screen        = self.imagePath
+                self.main.selectText    = self.select
                 self.main.isInitialized = False
                 self.main.clear()
                 return True
+
 
 
 if __name__ == '__main__':

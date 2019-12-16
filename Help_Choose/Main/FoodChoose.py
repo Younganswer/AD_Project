@@ -4,8 +4,8 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QGraphicsItem, QGraphicsPixmapItem
 
 
-#path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Help_Choose/'
-path = '/home/user/PycharmProjects/AD_Project/Help_Choose/'
+path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Youngseo/'
+#path = '/home/user/PycharmProjects/AD_Project/Hyewon/'
 
 SCREEN_WIDTH  = 800
 SCREEN_HEIGHT = 600
@@ -26,13 +26,15 @@ class FoodChoose(QGraphicsPixmapItem):
                     (700-imageWidth, 164), (700-imageWidth-dx, 164+dy), (700-imageWidth-dx*2, 164+dy*2), (700-imageWidth-dx*3, 164+dy*3),
                     (100+dx*3, 100+dy*3), (100+dx*2, 100+dy*2), (100+dx, 164+dy), (100, 164)]          
                           
-    def __init__(self, image, food, main, parent=None):
+    def __init__(self, image, food, url, main, parent=None):
         super().__init__(parent)
         self.setPixmap(QPixmap(path+image))
-        self.pos = 0
+        self.pos  = 0
         self.food = food
         self.main = main
+        self.url  = url
         self.foodImagePath = image
+        
         
     def game_update(self, bullets):
         self.pos += 1
@@ -46,6 +48,7 @@ class FoodChoose(QGraphicsPixmapItem):
                 bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 self.main.foodImagePath = self.foodImagePath
+                self.main.url           = self.url
                 self.main.screen        = self.food
                 self.main.foodList      = None
                 self.main.isInitialized = False

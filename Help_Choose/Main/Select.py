@@ -41,8 +41,8 @@ ENEMY_SPONE_X           = 800
 ENEMY_SPONE_Y           = 600
 ENEMY_FRAMES            = 500
 
-#path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Help_Choose/'
-path = '/home/user/PycharmProjects/AD_Project/Help_Choose/'
+path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Help_Choose/'
+#path = '/home/user/PycharmProjects/AD_Project/Help_Choose/'
 
 class Select(QGraphicsPixmapItem):
 

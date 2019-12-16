@@ -22,6 +22,8 @@ from PyQt5.QtWidgets import (
     QGraphicsView
 )
 
+import webbrowser
+
 from AskClose     import AskClose
 from BackGround   import BackGround
 from Bullet       import Bullet
@@ -45,8 +47,8 @@ ENEMY_SPONE_X           = 800
 ENEMY_SPONE_Y           = 600
 ENEMY_FRAMES            = 500
 
-#path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Help_Choose/'
-path = '/home/user/PycharmProjects/AD_Project/Help_Choose/'
+path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Youngseo/'
+#path = '/home/user/PycharmProjects/AD_Project/Hyewon/'
 
 class FoodInfo(QGraphicsPixmapItem):
 
@@ -62,14 +64,14 @@ class Retry(QGraphicsPixmapItem):
         self.setPixmap(QPixmap(path+'PNG/Food_Info/retry.png'))
         self.main = main
     
-    def game_update(self, bullets, isAllFood):
+    def game_update(self, bullets):
         for i in range(len(bullets)):
             if (self.x() <= bullets[i].x() <= self.x() + self.pixmap().width() and bullets[i].y() <= self.y() + self.pixmap().height()):
                 bullets[0].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 self.main.screen = self.main.previousScreen[self.main.screen]
-                if isAllFood:
+                if self.main.isAllFood:
                     self.main.screen = "AllFood"
                 self.main.isAllFood     = False
                 self.main.isInitialized = False
@@ -90,6 +92,7 @@ class Home(QGraphicsPixmapItem):
                 bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 self.main.screen = "InitialScreen"
+                self.main.isAllFood     = False
                 self.main.isInitialized = False
                 self.main.clear()
                 return True
@@ -107,5 +110,12 @@ class OpenURL(QGraphicsPixmapItem):
                 bullets[0].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+
                 # Open URL Code.
+                print(self.main.url)
+                webbrowser.open(self.main.url)
+                self.main.url = ''
+                self.main.screen = "InitialScreen"
+                self.main.isInitialized = False
+                self.main.clear()
                 return True
