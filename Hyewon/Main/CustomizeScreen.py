@@ -1,16 +1,51 @@
 # status를 이용해서 최소 3개이상 이니셜 되어 있어야 한다고 표시
-
+# sender = self.sender()
+# self.statusBar().showMessage("")
 
 import sys
-from PyQt5.QtWidgets import (QWidget, QPushButton,
-    QHBoxLayout, QVBoxLayout, QApplication, QLabel,
-    QComboBox, QTextEdit, QLineEdit, QGridLayout)
-from PyQt5.QtCore import Qt
+import random
+import time
+from PyQt5.QtMultimedia import QSound
+from PyQt5.QtCore import (
+    Qt,
+    QBasicTimer
+)
+from PyQt5.QtGui import (
+    QBrush,
+    QPixmap
+)
+from PyQt5.QtWidgets import (
+    QApplication,
+    QWidget,
+    QHBoxLayout,
+    QVBoxLayout,
+    QPushButton,
+    QComboBox,
+    QTextEdit,
+    QLineEdit,
+    QGridLayout,
+    QLabel,
+    QGraphicsItem,
+    QGraphicsPixmapItem,
+    QGraphicsRectItem,
+    QGraphicsScene,
+    QGraphicsView
+)
 
+imageWidth=128
+dx=60
+dy=15
+
+SCREEN_WIDTH  = 800
+SCREEN_HEIGHT = 600
+
+#path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Youngseo/'
+path = '/home/user/PycharmProjects/AD_Project/Hyewon/'
 
 class CustomizeScreen(QWidget):
-    def __init__(self):
+    def __init__(self, main):
         super().__init__()
+        self.main = main
 
     def initUI(self):
         self.setGeometry(300,300,400,100)
@@ -18,6 +53,7 @@ class CustomizeScreen(QWidget):
         # grid = QGridLayout()
         # self.setLayout(grid)
         self.initialized = 3
+        self.cancel = False
 
         self.lbl1 = QLabel('입력: ')
         self.lbl2 = QLabel('입력: ')
@@ -29,6 +65,8 @@ class CustomizeScreen(QWidget):
         self.lbl8 = QLabel('입력: ')
         self.lbl9 = QLabel('입력: ')
         self.lbl10 = QLabel('입력: ')
+        self.lbl11 = QLabel('')
+        self.lbl11.setAlignment(Qt.AlignCenter)
 
         self.LE1 = QLineEdit()
         self.LE2 = QLineEdit()
@@ -70,6 +108,7 @@ class CustomizeScreen(QWidget):
 
         self.hbox11 = QHBoxLayout()
         self.hbox12 = QHBoxLayout()
+        self.hbox13 = QHBoxLayout()
 
         self.vbox1 = QVBoxLayout()
         self.vbox2 = QVBoxLayout()
@@ -81,6 +120,7 @@ class CustomizeScreen(QWidget):
         self.vbox1.addLayout(self.hboxList[1])
         self.vbox1.addLayout(self.hboxList[2])
 
+        self.vbox2.addLayout(self.hbox13)
         self.vbox2.addLayout(self.hbox11)
         self.vbox2.addLayout(self.hbox12)
 
@@ -121,6 +161,7 @@ class CustomizeScreen(QWidget):
         self.hbox11.addWidget(self.addButton)
         self.hbox12.addWidget(self.saveButton)
         self.hbox12.addWidget(self.cancelButton)
+        self.hbox13.addWidget(self.lbl11)
 
         self.addButton.clicked.connect(self.Click_addButton)
         self.saveButton.clicked.connect(self.Click_saveButton)
@@ -137,7 +178,12 @@ class CustomizeScreen(QWidget):
                         8: {'del': self.delButton9, 'le': self.LE9, 'lbl': self.lbl9, 'hbox': self.hbox9},
                         9: {'del': self.delButton10, 'le': self.LE10, 'lbl': self.lbl10, 'hbox': self.hbox10}}
 
+        self.starImgList = ['PNG/Number/one.png',   'PNG/Number/two.png',   'PNG/Number/three.png',
+                            'PNG/Number/four.png',  'PNG/Number/five.png',  'PNG/Number/six.png',
+                            'PNG/Number/seven.png', 'PNG/Number/eight.png', 'PNG/Number/nine.png', 'PNG/Number/ten.png']
+
         self.initializedList = []
+        self.customizeDic = {}
         for i in range(3):
             self.initializedList.append(self.infoDic[i]['hbox'])
         for i in range(3, 10):
@@ -151,21 +197,19 @@ class CustomizeScreen(QWidget):
         self.setLayout(self.vbox3)
         self.show()
 
-        self.customizeList = []
-
     def Click_addButton(self):
-        if self.initialized < 10:
-            for i in range(len(self.infoDic)):
-                if self.infoDic[i]['hbox'] not in self.initializedList:
-                    self.initializedList.append(self.infoDic[i]['hbox'])
-                    self.vbox1.addLayout(self.infoDic[i]['hbox'])
-                    self.infoDic[i]['del'].show()
-                    self.infoDic[i]['le'].show()
-                    self.infoDic[i]['lbl'].show()
-                    self.initialized += 1
-                    break
+        for i in range(len(self.infoDic)):
+            if self.infoDic[i]['hbox'] not in self.initializedList:
+                self.initializedList.append(self.infoDic[i]['hbox'])
+                self.vbox1.addLayout(self.infoDic[i]['hbox'])
+                self.infoDic[i]['del'].show()
+                self.infoDic[i]['le'].show()
+                self.infoDic[i]['lbl'].show()
+                self.initialized += 1
+                break
 
         if self.initialized >= 10:
+            self.lbl11.setText("Up to 10 can be entered.")
             self.addButton.hide()
             self.vbox2.removeItem(self.hbox11)
 
@@ -182,6 +226,7 @@ class CustomizeScreen(QWidget):
 
         else:
             print("It has to more than 3.")
+            self.lbl11.setText("You must enter at least three")
             return
 
         if self.initialized == 10:
@@ -199,15 +244,58 @@ class CustomizeScreen(QWidget):
         print(self.initialized)
 
     def Click_saveButton(self):
-        for i in range(10):
-            if (len(self.LEList[i].text()) != 0):
-                self.customizeList.append(self.LEList[i].text())
-                print(self.LEList[i].text())
-        print(self.customizeList)
-        self.close()
+        count = 0
+        for i in range(len(self.initializedList)):
+            if (len(self.infoDic[i]['le'].text()) != 0):
+                count += 1
+
+        if count < 3:
+            self.lbl11.setText("You must enter at least three")
+
+        else:
+            for i in range(len(self.initializedList)):
+                if (len(self.infoDic[i]['le'].text()) != 0):
+                    self.customizeDic[i] = {'image': self.starImgList[i], 'text': self.infoDic[i]['le'].text()}
+            print(self.customizeDic)
+            self.close()
+            self.main.customizeDic = self.customizeDic
 
     def Click_cancelButton(self):
+        self.cancel = True
         self.close()
+
+
+class Customize(QGraphicsPixmapItem):
+
+    selectLocation = [(100, 100), (100+dx, 100-dy), (100+dx*2, 100-dy*2), (100+dx*3, 100-dy*3),
+                    (700-imageWidth-dx*3, 100-dy*3), (700-imageWidth-dx*2, 100-dy*2), (700-imageWidth-dx, 100-dy), (700-imageWidth, 100),
+                    (700-imageWidth, 164), (700-imageWidth-dx, 164+dy), (700-imageWidth-dx*2, 164+dy*2), (700-imageWidth-dx*3, 164+dy*3),
+                    (100+dx*3, 100+dy*3), (100+dx*2, 100+dy*2), (100+dx, 164+dy), (100, 164)]
+
+    def __init__(self, pixmap, text, main=None, parent=None):
+        super().__init__(parent)
+        self.setPixmap(QPixmap(path+pixmap))
+        self.pos = 0
+        self.imagePath = pixmap
+        self.main = main
+        self.select = text
+
+    def game_update(self, bullets):
+        self.pos += 1
+        if (self.pos > len(self.selectLocation)-1):
+            self.pos -= len(self.selectLocation)
+        x, y = self.selectLocation[self.pos][0], self.selectLocation[self.pos][1]
+        self.setPos(x, y)
+        for i in range(len(bullets)):
+            if (self.x() <= bullets[i].x() <= self.x() + self.pixmap().width() and bullets[i].y() <= self.y() + self.pixmap().height()):
+                bullets[0].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                self.main.screen        = self.imagePath
+                self.main.selectText    = self.select
+                self.main.isInitialized = False
+                self.main.clear()
+                return True
 
 
 if __name__ == '__main__':

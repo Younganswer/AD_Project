@@ -3,12 +3,44 @@
 # self.statusBar().showMessage("")
 
 import sys
-from PyQt5.QtWidgets import (QWidget, QPushButton,
-    QHBoxLayout, QVBoxLayout, QApplication, QLabel,
-    QComboBox, QTextEdit, QLineEdit, QGridLayout)
-from PyQt5.QtCore import Qt
+import random
+import time
+from PyQt5.QtMultimedia import QSound
+from PyQt5.QtCore import (
+    Qt,
+    QBasicTimer
+)
+from PyQt5.QtGui import (
+    QBrush,
+    QPixmap
+)
+from PyQt5.QtWidgets import (
+    QApplication,
+    QWidget,
+    QHBoxLayout,
+    QVBoxLayout,
+    QPushButton,
+    QComboBox,
+    QTextEdit,
+    QLineEdit,
+    QGridLayout,
+    QLabel,
+    QGraphicsItem,
+    QGraphicsPixmapItem,
+    QGraphicsRectItem,
+    QGraphicsScene,
+    QGraphicsView
+)
 
-path = '/home/user/PycharmProjects/AD_Project/Help_Choose/'
+imageWidth=128
+dx=60
+dy=15
+
+SCREEN_WIDTH  = 800
+SCREEN_HEIGHT = 600
+
+path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Youngseo/'
+
 class CustomizeScreen(QWidget):
     def __init__(self, main):
         super().__init__()
@@ -145,9 +177,10 @@ class CustomizeScreen(QWidget):
                         8: {'del': self.delButton9, 'le': self.LE9, 'lbl': self.lbl9, 'hbox': self.hbox9},
                         9: {'del': self.delButton10, 'le': self.LE10, 'lbl': self.lbl10, 'hbox': self.hbox10}}
 
-        self.starimglist = [path+'PNG/Number/one.png',path+'PNG/Number/two.png',path+'PNG/Number/three.png',path+'PNG/Number/four.png',
-                            path+'PNG/Number/five.png',path+'PNG/Number/six.png',path+'PNG/Number/seven.png',path+'PNG/Number/eight.png',
-                            path + 'PNG/Number/nine.png',path+'PNG/Number/ten.png']
+        self.starimglist = ['PNG/Number/one.png',   'PNG/Number/two.png',   'PNG/Number/three.png',
+                            'PNG/Number/four.png',  'PNG/Number/five.png',  'PNG/Number/six.png',
+                            'PNG/Number/seven.png', 'PNG/Number/eight.png', 'PNG/Number/nine.png', 'PNG/Number/ten.png']
+
         self.initializedList = []
         self.customizeDic = {}
         for i in range(3):
@@ -230,6 +263,37 @@ class CustomizeScreen(QWidget):
         self.cancel = True
         self.close()
 
+
+class Customize(QGraphicsPixmapItem):
+
+    selectLocation = [(100, 100), (100+dx, 100-dy), (100+dx*2, 100-dy*2), (100+dx*3, 100-dy*3),
+                    (700-imageWidth-dx*3, 100-dy*3), (700-imageWidth-dx*2, 100-dy*2), (700-imageWidth-dx, 100-dy), (700-imageWidth, 100),
+                    (700-imageWidth, 164), (700-imageWidth-dx, 164+dy), (700-imageWidth-dx*2, 164+dy*2), (700-imageWidth-dx*3, 164+dy*3),
+                    (100+dx*3, 100+dy*3), (100+dx*2, 100+dy*2), (100+dx, 164+dy), (100, 164)]
+
+    def __init__(self, pixmap, text, main=None, parent=None):
+        super().__init__(parent)
+        self.setPixmap(QPixmap(path+pixmap))
+        self.pos = 0
+        self.imagePath = pixmap
+        self.main = main
+        self.select = text
+
+    def game_update(self, bullets):
+        self.pos += 1
+        if (self.pos > len(self.selectLocation)-1):
+            self.pos -= len(self.selectLocation)
+        x, y = self.selectLocation[self.pos][0], self.selectLocation[self.pos][1]
+        self.setPos(x, y)
+        for i in range(len(bullets)):
+            if (self.x() <= bullets[i].x() <= self.x() + self.pixmap().width() and bullets[i].y() <= self.y() + self.pixmap().height()):
+                bullets[0].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                self.main.screen        = self.select
+                self.main.isInitialized = False
+                self.main.clear()
+                return True
 
 
 if __name__ == '__main__':

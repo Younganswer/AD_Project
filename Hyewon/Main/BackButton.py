@@ -22,11 +22,14 @@ from PyQt5.QtWidgets import (
     QGraphicsView
 )
 
-from AskClose   import AskClose
-from BackGround import BackGround
-from Bullet     import Bullet
-from FoodChoose import FoodChoose
-from Player     import Player
+from AskClose     import AskClose
+from BackGround   import BackGround
+from Bullet       import Bullet
+from Player       import Player
+from Select       import Select
+from FoodCategory import FoodCategory
+from FoodChoose   import FoodChoose
+import WholeFood
 
 SCREEN_WIDTH            = 800
 SCREEN_HEIGHT           = 600
@@ -44,21 +47,22 @@ ENEMY_FRAMES            = 500
 #path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Youngseo/'
 path = '/home/user/PycharmProjects/AD_Project/Hyewon/'
 
-class Select(QGraphicsPixmapItem):
+class BackButton(QGraphicsPixmapItem):
 
-    def __init__(self, pixmap, select, main, parent=None):
+    def __init__(self, main, parent=None):
         super().__init__(parent)
-        self.setPixmap(QPixmap(path+pixmap))
-        self.select = select
+        self.setPixmap(QPixmap(path+'PNG/Back_Button/opened-door-aperture.png'))
         self.main = main
-    
+
     def game_update(self, bullets):
         for i in range(len(bullets)):
             if (self.x() <= bullets[i].x() <= self.x() + self.pixmap().width() and bullets[i].y() <= self.y() + self.pixmap().height()):
                 bullets[0].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[1].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
                 bullets[2].setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
-                self.main.screen        = self.select
+                if self.main.isAllFood:
+                    self.main.isAllFood = False
+                self.main.screen = self.main.previousScreen[self.main.screen]
                 self.main.isInitialized = False
                 self.main.clear()
                 return True

@@ -3,9 +3,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QGraphicsItem, QGraphicsPixmapItem
 
-
+#path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Youngseo/'
 path = '/home/user/PycharmProjects/AD_Project/Hyewon/'
-
 
 PLAYER_SPEED  = 4   # pix/frame
 SCREEN_WIDTH  = 800
@@ -19,7 +18,7 @@ class Player(QGraphicsPixmapItem):
     def __init__(self, parent=None):
         self.IS_DEAD = False
         super().__init__(parent)
-        self.setPixmap(QPixmap(path+'PNG/playerShip1_blue.png'))
+        self.setPixmap(QPixmap(path+'PNG/Player_Images/playerShip1_blue.png'))
         # Player로 만들어진 객체에 image를 옮겨준다. QPixmap클래스의 메소드.
 
     def game_update(self, keys_pressed):
