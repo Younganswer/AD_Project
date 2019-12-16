@@ -21,7 +21,7 @@ dy=15
 class FoodChoose(QGraphicsPixmapItem):
 
     sound = QSound(path+'Bonus/sfx_retro_spaceship_explosion.wav')
-    slotSound = QSound(path+'Bonus/slot.mp3')  
+    slotSound = QSound(path+'Bonus/slot.wav')  
 
     foodLocation = [(100, 100), (100+dx, 100-dy), (100+dx*2, 100-dy*2), (100+dx*3, 100-dy*3),
                     (700-imageWidth-dx*3, 100-dy*3), (700-imageWidth-dx*2, 100-dy*2), (700-imageWidth-dx, 100-dy), (700-imageWidth, 100),
