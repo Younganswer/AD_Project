@@ -39,7 +39,8 @@ dy=15
 SCREEN_WIDTH  = 800
 SCREEN_HEIGHT = 600
 
-path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Youngseo/'
+#path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Youngseo/'
+path = '/home/user/PycharmProjects/AD_Project/Hyewon/'
 
 class CustomizeScreen(QWidget):
     def __init__(self, main):

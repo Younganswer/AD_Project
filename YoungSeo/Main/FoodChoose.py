@@ -4,7 +4,8 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QGraphicsItem, QGraphicsPixmapItem
 
 
-path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Youngseo/'
+#path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Youngseo/'
+path = '/home/user/PycharmProjects/AD_Project/Hyewon/'
 
 SCREEN_WIDTH  = 800
 SCREEN_HEIGHT = 600

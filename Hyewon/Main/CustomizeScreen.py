@@ -280,6 +280,7 @@ class Customize(QGraphicsPixmapItem):
         self.main = main
         self.select = text
 
+
     def game_update(self, bullets):
         self.pos += 1
         if (self.pos > len(self.selectLocation)-1):
@@ -296,6 +297,7 @@ class Customize(QGraphicsPixmapItem):
                 self.main.isInitialized = False
                 self.main.clear()
                 return True
+
 
 
 if __name__ == '__main__':
