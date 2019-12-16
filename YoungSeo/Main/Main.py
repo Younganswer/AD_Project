@@ -1,5 +1,6 @@
 import sys
 import random
+import time
 from PyQt5.QtMultimedia import QSound
 from PyQt5.QtCore import (
     Qt,
@@ -22,15 +23,16 @@ from PyQt5.QtWidgets import (
     QGraphicsView
 )
 
-from AskClose     import AskClose
-from BackGround   import BackGround
-from Bullet       import Bullet
-from Player       import Player
-from Select       import Select
-from FoodCategory import FoodCategory
-from FoodChoose   import FoodChoose
-from BackButton   import BackButton
-from FoodInfo     import FoodInfo, Retry, Home, OpenURL
+from AskClose        import AskClose
+from BackGround      import BackGround
+from Bullet          import Bullet
+from Player          import Player
+from Select          import Select
+from FoodCategory    import FoodCategory
+from FoodChoose      import FoodChoose
+from BackButton      import BackButton
+from CustomizeScreen import CustomizeScreen, Customize
+from FoodInfo        import FoodInfo, Retry, Home, OpenURL
 import WholeFood
 
 SCREEN_WIDTH            = 800
@@ -73,6 +75,8 @@ class Scene(QGraphicsScene):
         self.foodImagePath = ""
         self.isAllFood = False
         self.isInitialized = False
+        self.initUI = False
+        self.customizeDic = {}
 
         # Enemies
         # self.enemies = [Enemy()]
@@ -80,6 +84,7 @@ class Scene(QGraphicsScene):
         # self.addItem(self.enemies[0])
         # self.idx = [0]
 
+        self.customize = CustomizeScreen(self)
 
         self.view = QGraphicsView(self)
         self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -258,7 +263,7 @@ class Scene(QGraphicsScene):
                     food = FoodChoose(value['image'], key, self)
                     self.foodList.append(food)
                     food = None
-                
+
                 length = 0
                 for food in self.foodList:
                     x, y = FoodChoose.foodLocation[length][0], FoodChoose.foodLocation[length][1]
@@ -438,6 +443,7 @@ class Scene(QGraphicsScene):
                     food = FoodChoose(value['image'], key, self)
                     self.foodList.append(food)
                     food = None
+
                 
                 length = 0
                 for food in self.foodList:
@@ -580,8 +586,70 @@ class Scene(QGraphicsScene):
                 
 
         elif self.screen == "CustomizeScreen":
-            print(self.screen)
-            
+            if not self.isInitialized:
+                if not self.initUI:
+                    self.customize.cancel = False
+                    self.customize.initUI()
+                    self.initUI = True
+
+                else:
+                    if len(self.customizeDic) != 0:
+                        self.bg = BackGround("DarkBlue")
+                        self.addItem(self.bg)
+
+                        # Player
+                        self.player = Player()
+                        self.player.setPos((SCREEN_WIDTH - self.player.pixmap().width()) / 2, 500)
+                        self.addItem(self.player)
+
+                        # Bullets
+                        self.bullets = [Bullet(PLAYER_BULLET_X_OFFSETS[0], PLAYER_BULLET_Y),
+                                        Bullet(PLAYER_BULLET_X_OFFSETS[1], PLAYER_BULLET_Y - 30),
+                                        Bullet(PLAYER_BULLET_X_OFFSETS[2], PLAYER_BULLET_Y)]
+                        for b in self.bullets:
+                            b.setPos(SCREEN_WIDTH, SCREEN_HEIGHT)
+                            self.addItem(b)
+
+                        self.selectList = []
+                        for value in self.customizeDic.values():
+                            select = Customize(value['image'], value['text'], self)
+                            self.selectList.append(select)
+                            select = None
+
+                        length = 0
+                        for select in self.selectList:
+                            x, y = Customize.selectLocation[length][0], Customize.selectLocation[length][1]
+                            select.setPos(x, y)
+                            select.pos = length
+                            self.addItem(select)
+                            length += len(Customize.selectLocation) // len(self.selectList)
+
+
+                        # BackButton
+                        self.backButton = BackButton(self)
+                        self.backButton.setPos(10, 20)
+                        self.addItem(self.backButton)
+
+                        self.isInitialized = True
+
+
+                    else:
+                        if self.customize.cancel:
+                            self.screen = 'InitialScreen'
+                            self.isInitialized = False
+                            self.clear()
+
+
+            else:
+                self.player.game_update(self.keys_pressed)
+                for b in self.bullets:
+                    b.game_update(self.keys_pressed, self.player)
+
+                if self.backButton.game_update(self.bullets):
+                    return
+
+
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
