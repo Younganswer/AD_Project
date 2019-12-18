@@ -25,6 +25,7 @@ from PyQt5.QtWidgets import (
     QGraphicsScene,
     QGraphicsView
 )
+from playsound import playsound
 
 from AskClose        import AskClose
 from BackGround      import BackGround
@@ -52,7 +53,7 @@ ENEMY_SPONE_X           = 800
 ENEMY_SPONE_Y           = 600
 ENEMY_FRAMES            = 500
 
-
+path = 'C:/Users/dudtj/iCloudDrive/vscode_workspace/Python_workspace/Github/AD_Project/Help_Choose/'
 
 # 메인 클래스
 class Scene(QGraphicsScene):
